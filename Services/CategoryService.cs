@@ -7,8 +7,12 @@ namespace ValgfagPortfolio.Services;
 public class CategoryService
 {
     private List<Category> categories = new();
+    private readonly IRepository<Category> repository;
 
-    private IRepository<Category> repository;
+    public CategoryService(IRepository<Category> repository)
+    {
+        this.repository = repository;
+    }
 
     public async Task<bool> CreateNewCategory(Category category)
     {
@@ -29,7 +33,7 @@ public class CategoryService
     public async Task<List<Category>> GetAllCategories()
     {
         categories = await repository.GetAllEntitiesAsync();
-        return categories.IsNullOrEmpty() ? new List<Category>() : categories;
+        return categories.Count == 0 ? new List<Category>() : categories;
     }
 
     public async Task<Category> GetCategoryById(int id)

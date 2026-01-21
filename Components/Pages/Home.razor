@@ -6,7 +6,9 @@
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
-<MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCategoryDialogAsync"></MudFab>
+<MudButton @onclick="OpenCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
+    Create new Category
+</MudButton>
 <MudGrid>
     @if (!categories.IsNullOrEmpty())
     {
@@ -38,14 +40,32 @@
         categories = await categoryService.GetAllCategories();
     }
 
-    private Task OpenCategoryDialogAsync()
+    private async Task OpenCategoryDialogAsync()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
-        return DialogService.ShowAsync<NewCategoryDialog>("Create New Category", options);
+        await DialogService.ShowAsync<NewCategoryDialog>("New Category", options);
     }
 
     protected override async Task OnInitializedAsync()
     {
         await GetAllCategories();
+        var testCategory = new Model.Category
+        {
+            Title = "Test",
+            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+            CoverImgPath = "./wwwroot/Images/Category-Class.png",
+            LogoImgPath = "./wwwroot/Images/Logo-lib.png",
+            Id = 9999
+        };
+        var testCategory2 = new Model.Category
+        {
+            Title = "Test2",
+            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+            CoverImgPath = "./wwwroot/Images/Category-Class.png",
+            LogoImgPath = "./wwwroot/Images/Logo-lib.png",
+            Id = 9998
+        };
+        categories.Add(testCategory);
+        categories.Add(testCategory2);
     }
 }
