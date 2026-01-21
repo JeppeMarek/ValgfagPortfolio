@@ -19,9 +19,10 @@ public class CategoryService
         }
         else
         {
-            await repository.CreateEnitityAsync(category);
+            await repository.CreateEntityAsync(category);
             success = true;
         }
+
         return success;
     }
 
@@ -40,14 +41,14 @@ public class CategoryService
     public async Task<bool> UpdateCategory(Category category)
     {
         var success = category == null || category.Id != -1;
-        if (success) await repository.UpdateEnitityAsync(category);
+        if (success) await repository.UpdateEntityAsync(category);
         return success;
     }
 
     public async Task<bool> DeleteCategory(Category category)
     {
         var success = category == null || category.Id != -1;
-        if (success) await repository.DeleteEnitityAsync(category);
+        if (success) await repository.DeleteEntityAsync(category);
         return success;
     }
 }

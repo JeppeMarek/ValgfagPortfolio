@@ -336,7 +336,7 @@ namespace ValgfagPortfolio.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -465,7 +465,9 @@ namespace ValgfagPortfolio.Migrations
                 {
                     b.HasOne("ValgfagPortfolio.Model.Category", null)
                         .WithMany("Posts")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ValgfagPortfolio.Model.Category", b =>

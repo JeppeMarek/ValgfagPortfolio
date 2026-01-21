@@ -1,11 +1,51 @@
 ﻿@page "/"
+@using Microsoft.IdentityModel.Tokens
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject CategoryService categoryService
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Jeppe Marek Portfolio</PageTitle>
+<header>Jeppe Marek Portfolio</header>
+<MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenCategoryDialogAsync"></MudFab>
+<MudGrid>
+    @if (!categories.IsNullOrEmpty())
+    {
+        foreach (var cat in categories)
+        {
+            <MudItem>
+                <MudCard>
+                    <MudCardHeader>
+                        @cat.Title
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @cat.Description
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    }
+</MudGrid>
 
 
 
 
 @code
 {
-    
+    private List<Model.Category> categories;
+
+    private async Task GetAllCategories()
+    {
+        categories = await categoryService.GetAllCategories();
+    }
+
+    private Task OpenCategoryDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        return DialogService.ShowAsync<NewCategoryDialog>("Create New Category", options);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllCategories();
+    }
 }

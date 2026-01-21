@@ -1,17 +1,31 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using ValgfagPortfolio.Components;
 using ValgfagPortfolio.Components.Account;
 using ValgfagPortfolio.Data;
+using ValgfagPortfolio.Model;
+using ValgfagPortfolio.Persistence.Interfaces;
+using ValgfagPortfolio.Persistence.Repositories;
+using ValgfagPortfolio.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents();
-
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 
+// Dependecy Injection Repositories
+builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
+builder.Services.AddScoped<IRepository<Post>, PostRepository>();
+// DI Service
+builder.Services.AddScoped<CategoryService>();
+
+// MudBlazor
+builder.Services.AddMudServices();
+
+// Authentication
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -19,13 +33,14 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 builder.Services.AddAuthorization();
-
+// Connectionstring
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+// Application user from Identity and DbContext
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
@@ -46,7 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Error", true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -57,7 +72,7 @@ app.UseHttpsRedirection();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
