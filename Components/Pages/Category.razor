@@ -1,5 +1,71 @@
+@page "/category-details/{Id:int}"
+@inject CategoryService categoryService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
 <h3>Category</h3>
+@if (category != null)
+{
+    <h2>@category.Title</h2>
+    <p>@posts?.Count</p>
+    <table class="table table-hover bg-white">
+        <thead>
+        <tr>
+            <th scope="col">Kategori</th>
+            <th scope="col">Indhold</th>
+            <th scope="col">Oprettet</th>
+            <th scope="col">Redigeret</th>
+            <th scope="col" class="text-center">
+                <i class="bi bi-gear-fill"></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var post in posts ?? new List<Post>())
+        {
+            <tr @onclick="@(() => OnRowClick())" style="cursor: pointer">
+                <td>@post.Title</td>
+                <td>@post.Content</td>
+                <td>@post.DateCreated</td>
+                <td>@post.DateEdited</td>
+                <td>
+                    <MudButton StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Category not found.</p>
+}
 
 @code {
-    
+    [Parameter] public int Id { get; set; }
+    private Model.Category category;
+    private List<Post>? posts;
+
+    // Click event - in testing it should redirect to home page.
+    // TODO implement post component
+    private void OnRowClick()
+    {
+        navigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            category = await categoryService.GetCategoryById(Id);
+            posts = category?.Posts ?? new List<Post>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            posts = new List<Post>();
+        }
+    }
+
 }

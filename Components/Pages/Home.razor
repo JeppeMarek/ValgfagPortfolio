@@ -6,7 +6,7 @@
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
-<MudButton @onclick="OpenCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
+<MudButton @onclick="OpenNewCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
     Create new Category
 </MudButton>
 <MudGrid>
@@ -16,12 +16,16 @@
         {
             <MudItem>
                 <MudCard>
-                    <MudCardHeader>
-                        @cat.Title
-                    </MudCardHeader>
+                    <MudCardMedia Image=@cat.CoverImgPath Height="200"></MudCardMedia>
                     <MudCardContent>
-                        @cat.Description
+                        <MudText Typo="Typo.h3">@cat.Title</MudText>
+                        <MudText Typo="Typo.body1">@cat.Description</MudText>
                     </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" @Color="Color.Primary">
+                            <a href="/category-details/@cat.Id">Åbn kategori</a>
+                        </MudButton>
+                    </MudCardActions>
                 </MudCard>
             </MudItem>
         }
@@ -33,14 +37,14 @@
 
 @code
 {
-    private List<Model.Category> categories;
+    private List<Model.Category> categories = new();
 
     private async Task GetAllCategories()
     {
         categories = await categoryService.GetAllCategories();
     }
 
-    private async Task OpenCategoryDialogAsync()
+    private async Task OpenNewCategoryDialogAsync()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         await DialogService.ShowAsync<NewCategoryDialog>("New Category", options);
@@ -49,23 +53,48 @@
     protected override async Task OnInitializedAsync()
     {
         await GetAllCategories();
-        var testCategory = new Model.Category
-        {
-            Title = "Test",
-            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
-            CoverImgPath = "./wwwroot/Images/Category-Class.png",
-            LogoImgPath = "./wwwroot/Images/Logo-lib.png",
-            Id = 9999
-        };
-        var testCategory2 = new Model.Category
-        {
-            Title = "Test2",
-            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
-            CoverImgPath = "./wwwroot/Images/Category-Class.png",
-            LogoImgPath = "./wwwroot/Images/Logo-lib.png",
-            Id = 9998
-        };
-        categories.Add(testCategory);
-        categories.Add(testCategory2);
+
+        // #region MockData
+        //
+        // var testCategory = new Model.Category
+        // {
+        //     Title = "Test",
+        //     Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+        //     CoverImgPath = "Images/Category-Class.png",
+        //     LogoImgPath = "Images/Logo-lib.png",
+        //     Posts = new List<Post>(),
+        //     Id = 9999
+        // };
+        // var testCategory2 = new Model.Category
+        // {
+        //     Title = "Test2",
+        //     Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+        //     CoverImgPath = "Images/Category-Class.png",
+        //     LogoImgPath = "Images/Logo-lib.png",
+        //     Id = 9998
+        // };
+        // var testPost = new Post
+        // {
+        //     Title = "Test Post",
+        //     Content = "Det her er bare noget test indhold, værsgo",
+        //     DateCreated = DateTime.Today,
+        //     DateEdited = DateTime.Today,
+        //     CategoryId = 9999,
+        //     Id = 9999
+        // };
+        // var testPost2 = new Post
+        // {
+        //     Title = "Test Post2",
+        //     Content = "Det her er bare noget2 test indhold2, værsgo2",
+        //     DateCreated = DateTime.Today.AddDays(2),
+        //     DateEdited = DateTime.Today.AddDays(1),
+        //     CategoryId = 9999,
+        //     Id = 9999
+        // };
+        // testCategory.Posts.Add(testPost);
+        // testCategory.Posts.Add(testPost2);
+        // categories.Add(testCategory);
+        // categories.Add(testCategory2);
+        // #endregion
     }
 }

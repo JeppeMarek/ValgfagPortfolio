@@ -6,8 +6,8 @@ namespace ValgfagPortfolio.Services;
 
 public class CategoryService
 {
-    private List<Category> categories = new();
     private readonly IRepository<Category> repository;
+    private List<Category> categories = new();
 
     public CategoryService(IRepository<Category> repository)
     {
@@ -38,20 +38,20 @@ public class CategoryService
 
     public async Task<Category> GetCategoryById(int id)
     {
-        if (id <= -1) return null;
+        if (id <= 0) return null;
         return await repository.GetEntityByIdAsync(id);
     }
 
     public async Task<bool> UpdateCategory(Category category)
     {
-        var success = category == null || category.Id != -1;
+        var success = category != null || category.Id != -1;
         if (success) await repository.UpdateEntityAsync(category);
         return success;
     }
 
     public async Task<bool> DeleteCategory(Category category)
     {
-        var success = category == null || category.Id != -1;
+        var success = category != null || category.Id != -1;
         if (success) await repository.DeleteEntityAsync(category);
         return success;
     }

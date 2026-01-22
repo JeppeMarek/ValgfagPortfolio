@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ValgfagPortfolio.Data;
 using ValgfagPortfolio.Model;
 using ValgfagPortfolio.Persistence.Interfaces;
@@ -24,14 +25,16 @@ public class CategoryRepository : IRepository<Category>
 
     public async Task<List<Category>> GetAllEntitiesAsync()
     {
-        var categories = _context.Categories.ToList();
+        var categories = await _context.Categories.ToListAsync();
         return await Task.FromResult(categories);
     }
+    
 
     public async Task<Category> GetEntityByIdAsync(int id)
     {
-        var category = _context.Categories.Find(id);
-        return await Task.FromResult(category);
+        var category = await _context.Categories.Include(c => c.Posts)
+            .FirstOrDefaultAsync(c => c.Id == id);
+        return category;
     }
 
     public async Task UpdateEntityAsync(Category entity)

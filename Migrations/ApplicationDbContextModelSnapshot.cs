@@ -326,6 +326,24 @@ namespace ValgfagPortfolio.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CoverImgPath = "Images/Category-Class.png",
+                            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+                            LogoImgPath = "Images/Logo-lib.png",
+                            Title = "Test"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CoverImgPath = "Images/Category-Class.png",
+                            Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
+                            LogoImgPath = "Images/Logo-lib.png",
+                            Title = "Test2"
+                        });
                 });
 
             modelBuilder.Entity("ValgfagPortfolio.Model.Post", b =>
@@ -357,6 +375,26 @@ namespace ValgfagPortfolio.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Posts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Content = "Det her er bare noget test indhold, værsgo",
+                            DateCreated = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateEdited = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Local),
+                            Title = "Test Post"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Content = "Det her er bare noget2 test indhold2, værsgo2",
+                            DateCreated = new DateTime(2026, 1, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateEdited = new DateTime(2026, 1, 23, 0, 0, 0, 0, DateTimeKind.Local),
+                            Title = "Test Post2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
