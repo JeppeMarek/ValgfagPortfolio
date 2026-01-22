@@ -7,47 +7,46 @@ namespace ValgfagPortfolio.Persistence.Repositories;
 
 public class CategoryRepository : IRepository<Category>
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext context;
 
     public CategoryRepository(ApplicationDbContext context)
     {
-        _context = context;
+        this.context = context;
     }
 
     public async Task CreateEntityAsync(Category entity)
     {
         if (entity != null)
         {
-            _context.Categories.Add(entity);
-            await _context.SaveChangesAsync();
+            context.Categories.Add(entity);
+            await context.SaveChangesAsync();
         }
     }
 
     public async Task<List<Category>> GetAllEntitiesAsync()
     {
-        var categories = await _context.Categories.ToListAsync();
-        return await Task.FromResult(categories);
+        return await context.Categories.ToListAsync();
     }
-    
+
 
     public async Task<Category> GetEntityByIdAsync(int id)
     {
-        var category = await _context.Categories.Include(c => c.Posts)
+        var category = await context.Categories.Include(c => c.Posts)
             .FirstOrDefaultAsync(c => c.Id == id);
         return category;
     }
 
     public async Task UpdateEntityAsync(Category entity)
     {
-        var existingCategory = GetEntityByIdAsync(entity.Id).Result;
+        var existingCategory = await GetEntityByIdAsync(entity.Id);
         if (existingCategory == null) return;
-        _context.Entry(existingCategory).CurrentValues.SetValues(entity);
-        await _context.SaveChangesAsync();
+        context.Entry(existingCategory).CurrentValues.SetValues(entity);
+        await context.SaveChangesAsync();
     }
 
     public async Task DeleteEntityAsync(Category entity)
     {
-        _context.Categories.Remove(entity);
-        await _context.SaveChangesAsync();
+        context.Categories.Remove(entity);
+        await context.SaveChangesAsync();
     }
 }
