@@ -1,16 +1,11 @@
 ﻿@page "/"
 @using Microsoft.IdentityModel.Tokens
 @rendermode InteractiveServer
-@inject IDialogService DialogService
 @inject CategoryService categoryService
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
-<MudButton OnClick="OpenNewCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
-    Create new Category
-</MudButton>
-<button @onclick="OpenNewCategoryDialogAsync">TÆST</button>
-<NewCategoryDialog></NewCategoryDialog>
+<MudNavLink Href="/category/new" Icon="@Icons.Material.Filled.Add"></MudNavLink>
 <br/>
 <MudGrid>
     @if (!categories.IsNullOrEmpty())
@@ -34,67 +29,3 @@
         }
     }
 </MudGrid>
-
-@code
-{
-    private List<Model.Category> categories = new();
-
-    private async Task GetAllCategories()
-    {
-        categories = await categoryService.GetAllCategories();
-    }
-
-    async Task OpenNewCategoryDialogAsync()
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        await DialogService.ShowAsync<NewCategoryDialog>("New Category", options);
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetAllCategories();
-
-        // #region MockData
-        //
-        // var testCategory = new Model.Category
-        // {
-        //     Title = "Test",
-        //     Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
-        //     CoverImgPath = "Images/Category-Class.png",
-        //     LogoImgPath = "Images/Logo-lib.png",
-        //     Posts = new List<Post>(),
-        //     Id = 9999
-        // };
-        // var testCategory2 = new Model.Category
-        // {
-        //     Title = "Test2",
-        //     Description = "Det her er noget tekst for at teste hvordan det kommer til at se ud",
-        //     CoverImgPath = "Images/Category-Class.png",
-        //     LogoImgPath = "Images/Logo-lib.png",
-        //     Id = 9998
-        // };
-        // var testPost = new Post
-        // {
-        //     Title = "Test Post",
-        //     Content = "Det her er bare noget test indhold, værsgo",
-        //     DateCreated = DateTime.Today,
-        //     DateEdited = DateTime.Today,
-        //     CategoryId = 9999,
-        //     Id = 9999
-        // };
-        // var testPost2 = new Post
-        // {
-        //     Title = "Test Post2",
-        //     Content = "Det her er bare noget2 test indhold2, værsgo2",
-        //     DateCreated = DateTime.Today.AddDays(2),
-        //     DateEdited = DateTime.Today.AddDays(1),
-        //     CategoryId = 9999,
-        //     Id = 9999
-        // };
-        // testCategory.Posts.Add(testPost);
-        // testCategory.Posts.Add(testPost2);
-        // categories.Add(testCategory);
-        // categories.Add(testCategory2);
-        // #endregion
-    }
-}

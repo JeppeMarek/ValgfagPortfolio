@@ -1,0 +1,41 @@
+@page "/category/new"
+@inject CategoryService categoryService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" Model="@newCategory" @bind-IsValid="@success"
+                     @bind-Errors="@errors">
+                <MudTextField T="string" Label="Titel" @bind-Value="newCategory.Title"
+                              Required="true"
+                              RequiredError="Kategori titel er obligatorisk!"/>
+                <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
+                              Required="false"/>
+                <MudTextField T="string" Label="Billede" @bind-Value="newCategory.CoverImgPath"
+                              HelperText="Skriv sti til 
+               billede. anden implementering kommer"></MudTextField>
+                <MudTextField T="string" Label="Logo" @bind-Value="newCategory
+                .LogoImgPath" HelperText="Skriv sti til 
+                billede. anden implementering kommer"></MudTextField>
+            </MudForm>
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
+                       OnClick="@ValidateAndSaveAsync">Validate
+            </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
+                       OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+            @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
