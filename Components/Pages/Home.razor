@@ -6,9 +6,12 @@
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
-<MudButton @onclick="OpenNewCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
+<MudButton OnClick="OpenNewCategoryDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
     Create new Category
 </MudButton>
+<button @onclick="OpenNewCategoryDialogAsync">TÆST</button>
+<NewCategoryDialog></NewCategoryDialog>
+<br/>
 <MudGrid>
     @if (!categories.IsNullOrEmpty())
     {
@@ -32,9 +35,6 @@
     }
 </MudGrid>
 
-
-
-
 @code
 {
     private List<Model.Category> categories = new();
@@ -44,7 +44,7 @@
         categories = await categoryService.GetAllCategories();
     }
 
-    private async Task OpenNewCategoryDialogAsync()
+    async Task OpenNewCategoryDialogAsync()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         await DialogService.ShowAsync<NewCategoryDialog>("New Category", options);
