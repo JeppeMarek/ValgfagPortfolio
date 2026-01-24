@@ -9,7 +9,7 @@ public partial class NewCategory : ComponentBase
 {
     private string[] errors = { };
     private MudForm form;
-    private Category newCategory = new Category();
+    private readonly Category newCategory = new();
     private bool success;
 
     private async Task ResetFormAndValidationAsync()
@@ -24,7 +24,7 @@ public partial class NewCategory : ComponentBase
         {
             if (form.IsValid && !newCategory.Title.IsNullOrEmpty())
             {
-                success = await categoryService.CreateNewCategory(newCategory);
+                success = await categoryService.CreateCategoryAsync(newCategory);
                 if (success) navigationManager.NavigateTo("/", true);
             }
         }

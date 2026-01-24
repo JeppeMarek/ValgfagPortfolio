@@ -9,7 +9,7 @@ public partial class Home : ComponentBase
     private async Task GetAllCategories()
 
     {
-        categories = await categoryService.GetAllCategories();
+        categories = await categoryService.GetAllCategoriesAsync();
     }
 
     protected override async Task OnInitializedAsync()

@@ -19,7 +19,8 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 // DI Service
-builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ICategoryService,CategoryService>();
+builder.Services.AddScoped<IPostService,PostService>();
 
 // MudBlazor
 builder.Services.AddMudServices();

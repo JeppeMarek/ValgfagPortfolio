@@ -59,7 +59,7 @@ else
     {
         try
         {
-            category = await categoryService.GetCategoryById(Id);
+            category = await categoryService.GetCategoryByIdAsync(Id);
             posts = category?.Posts ?? new List<Post>();
         }
         catch (Exception e)
