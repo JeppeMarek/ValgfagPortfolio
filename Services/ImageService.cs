@@ -1,63 +1,57 @@
+using Microsoft.AspNetCore.Components.Forms;
+
 namespace ValgfagPortfolio.Services;
 
 public class ImageService : IImageService
 {
-    private const int MaxFileSize = 10 * 1024 * 1024;
+    private const long Maxfilesize = 5 * 1024 * 1024;
 
-    //TODO Implement this service with newcategory funcionality
-    private readonly IWebHostEnvironment environment;
 
-    public ImageService(IWebHostEnvironment environment)
+    private static readonly string[] AllowedTypes =
     {
-        this.environment = environment;
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    };
+
+    private readonly IWebHostEnvironment env;
+
+    public ImageService(IWebHostEnvironment env)
+    {
+        this.env = env;
     }
 
-    public async Task<string> UploadImageAsync(IFormFile file, string id, string type)
+    public async Task<string> UploadImageAsync(IBrowserFile file, string folder,
+        CancellationToken cancellationToken = default)
     {
-        Console.WriteLine(
-            $"File: {file?.FileName}, Size: {file?.Length}, Type: {type}"); //debugging
-
-        if (file == null) throw new FileNotFoundException("Filen blev ikke fundet");
-        if (file.Length > MaxFileSize) throw new Exception("Filen er for stor. Max 5 MB");
-        if (!file.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-            throw new Exception("Fil typen er ikke godkendt. Kun .jpg & .png filer tilladt");
-        var uploadsPath = Path.Combine(environment.WebRootPath, "Images", type);
-        Directory.CreateDirectory(uploadsPath);
-
-        var fileExtension = Path.GetExtension(file.FileName);
-        var fileName = $"{id}_{Guid.NewGuid()}{fileExtension}";
-        var filePath = Path.Combine(uploadsPath, fileName);
-
-        // Save the file
-        await using (var fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
-        }
-
-        // Return web-accessible path instead of absolute file system path
-        return $"/Images/{type}/{fileName}";
+        // Validate type and size
+        if (!AllowedTypes.Contains(file.ContentType))
+            throw new InvalidOperationException
+                ("Ugyldigt fil format");
+        if (file.Size > Maxfilesize)
+            throw new InvalidOperationException("Filen er for stor. Max 5 mb");
+        // Setup folder for uploads
+        var uploadsRoot = Path.Combine(env.WebRootPath, "uploads", folder);
+        Directory.CreateDirectory(uploadsRoot);
+        // Generate an id for file and set the filepath
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+        var filePath = Path.Combine(uploadsRoot, fileName);
+        // Copy file to folder
+        await using var stream = File.Create(filePath);
+        await file.OpenReadStream(Maxfilesize).CopyToAsync(stream, cancellationToken);
+        // Return the relative filepath
+        var relPath = $"uploads/{folder}/{fileName}";
+        return relPath;
     }
 
-    public Task DeleteImageAsync(string webPath)
+    public async Task DeleteImageAsync(string filePath)
     {
-        // Delete file from disk
-        if (!string.IsNullOrEmpty(webPath))
-        {
-            // Convert web path to absolute file system path
-            var absolutePath = Path.Combine(environment.WebRootPath, webPath.TrimStart('/'));
-            if (File.Exists(absolutePath)) File.Delete(absolutePath);
-        }
-
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
-
 
     public async Task<string> UpdateImageAsync(IFormFile file, string id, string type,
         string oldImagePath)
     {
-        // Delete old image if it exists
-        if (!string.IsNullOrEmpty(oldImagePath)) await DeleteImageAsync(oldImagePath);
-        // Upload new image
-        return await UploadImageAsync(file, id, type);
+        throw new NotImplementedException();
     }
 }

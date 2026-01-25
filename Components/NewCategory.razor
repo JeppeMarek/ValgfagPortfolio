@@ -1,7 +1,10 @@
 @page "/category/new"
-@inject ICategoryService categoryService
-@inject NavigationManager navigationManager
 @rendermode InteractiveServer
+
+@inject ICategoryService categoryService
+@inject IImageService imageService
+@inject NavigationManager navigationManager
+
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
@@ -10,11 +13,26 @@
                 <MudTextField T="string" Label="Titel" @bind-Value="newCategory.Title"
                               Required="true"
                               RequiredError="Kategori titel er obligatorisk!"/>
+
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
                               Required="false"/>
                 <MudTextField T="string" Label="Billede" @bind-Value="newCategory.CoverImgPath"
                               HelperText="Skriv sti til 
                billede. anden implementering kommer"></MudTextField>
+
+
+                <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
+                               OnFilesChanged="OnCoverImageSelected"
+                >
+                    <ActivatorContent>
+                        <MudButton
+                            Variant="Variant.Filled"
+                            Color="Color.Primary"
+                            StartIcon="@Icons.Material.Filled.CloudUpload">
+                            Upload Files
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
                 <MudTextField T="string" Label="Logo" @bind-Value="newCategory
                 .LogoImgPath" HelperText="Skriv sti til 
                 billede. anden implementering kommer"></MudTextField>

@@ -19,8 +19,9 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 // DI Service
-builder.Services.AddScoped<ICategoryService,CategoryService>();
-builder.Services.AddScoped<IPostService,PostService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 // MudBlazor
 builder.Services.AddMudServices();
@@ -35,7 +36,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 // Connectionstring
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+                       throw new InvalidOperationException(
+                           "Connection string 'DefaultConnection' not found.");
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using ValgfagPortfolio.Model;
 
@@ -7,9 +7,10 @@ namespace ValgfagPortfolio.Components;
 
 public partial class NewCategory : ComponentBase
 {
+    private readonly Category newCategory = new();
+    private IBrowserFile? coverImage;
     private string[] errors = { };
     private MudForm form;
-    private readonly Category newCategory = new();
     private bool success;
 
     private async Task ResetFormAndValidationAsync()
@@ -20,17 +21,31 @@ public partial class NewCategory : ComponentBase
 
     private async Task ValidateAndSaveAsync()
     {
+        await form.Validate();
+
+        if (!form.IsValid)
+            return;
+
         try
         {
-            if (form.IsValid && !newCategory.Title.IsNullOrEmpty())
-            {
-                success = await categoryService.CreateCategoryAsync(newCategory);
-                if (success) navigationManager.NavigateTo("/", true);
-            }
+            if (coverImage is not null)
+                newCategory.CoverImgPath =
+                    await imageService.UploadImageAsync(coverImage,
+                        "categories");
+
+            success = await categoryService.CreateCategoryAsync(newCategory);
+
+            if (success)
+                navigationManager.NavigateTo("/", true);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            errors = [ex.Message];
         }
+    }
+
+    private void OnCoverImageSelected(InputFileChangeEventArgs e)
+    {
+        coverImage = e.File;
     }
 }
