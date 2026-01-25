@@ -5,7 +5,16 @@
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
-<MudNavLink Href="/category/new" Icon="@Icons.Material.Filled.Add"></MudNavLink>
+<AuthorizeView>
+    <Authorized>
+        <MudNavLink Href="/category/new"
+                    Icon="@Icons.Material.TwoTone.AddCircle"
+                    IconColor="Color.Primary">
+            Ny Kategori
+        </MudNavLink>
+    </Authorized>
+</AuthorizeView>
+
 <br/>
 <MudGrid>
     @if (!categories.IsNullOrEmpty())

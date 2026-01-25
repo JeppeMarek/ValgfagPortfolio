@@ -15,6 +15,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 
+
 // Dependecy Injection Repositories
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
@@ -78,5 +79,7 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+// Seed admin
+await AdminSeed.EnsureAdminAsync(app.Services);
 
 app.Run();
