@@ -43,6 +43,8 @@ public partial class NewCategory : ComponentBase
             newCategory.CoverImgPath =
                 await imageService.UploadImageAsync(coverImage,
                     "categories");
+        else
+            newCategory.CoverImgPath = "wwwroot/Images/cover/default-cover.jpeg";
         isUploaded = true;
         return isUploaded;
     }
