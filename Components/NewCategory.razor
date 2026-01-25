@@ -16,11 +16,6 @@
 
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
                               Required="false"/>
-                <MudTextField T="string" Label="Billede" @bind-Value="newCategory.CoverImgPath"
-                              HelperText="Skriv sti til 
-               billede. anden implementering kommer"></MudTextField>
-
-
                 <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
                                OnFilesChanged="OnCoverImageSelected"
                 >
@@ -29,7 +24,7 @@
                             Variant="Variant.Filled"
                             Color="Color.Primary"
                             StartIcon="@Icons.Material.Filled.CloudUpload">
-                            Upload Files
+                            Upload cover billede
                         </MudButton>
                     </ActivatorContent>
                 </MudFileUpload>
