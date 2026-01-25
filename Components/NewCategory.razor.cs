@@ -9,6 +9,7 @@ public partial class NewCategory : ComponentBase
 {
     private readonly Category newCategory = new();
     private IBrowserFile? coverImage;
+    private string? coverPreviewURL;
     private string[] errors = { };
     private MudForm form;
     private bool isValid;
@@ -25,15 +26,15 @@ public partial class NewCategory : ComponentBase
         selectedIcon = null;
     }
 
-    private async Task SetIconAsync()
+    private void SetIcon()
     {
-        switch (selectedIcon)
+        newCategory.LogoImgPath = selectedIcon switch
         {
-            case null: newCategory.LogoImgPath = null; break;
-            case "Log": newCategory.LogoImgPath = "Icons.Material.Filled.Assignment"; break;
-            case "Project": newCategory.LogoImgPath = "Icons.Material.Filled.DynamicFeed"; break;
-            case "Diverse": newCategory.LogoImgPath = "Icons.Material.Filled.Assignment"; break;
-        }
+            "Log" => "/Images/icons/log.png",
+            "Project" => "/Images/icons/project.png",
+            "Diverse" => "/Images/icons/diverse.png",
+            _ => "/Images/icons/default-icon.png"
+        };
     }
 
     private async Task<bool> SetCoverImageAsync()
@@ -44,14 +45,21 @@ public partial class NewCategory : ComponentBase
                 await imageService.UploadImageAsync(coverImage,
                     "categories");
         else
-            newCategory.CoverImgPath = "wwwroot/Images/cover/default-cover.jpeg";
+            newCategory.CoverImgPath = "Images/cover/default-cover.jpeg";
         isUploaded = true;
         return isUploaded;
     }
 
-    private void OnCoverImageSelected(InputFileChangeEventArgs e)
+    private async Task OnCoverImageSelected(InputFileChangeEventArgs e)
     {
         coverImage = e.File;
+
+        using var stream = coverImage.OpenReadStream(5_000_000);
+        var buffer = new byte[coverImage.Size];
+        await stream.ReadAsync(buffer);
+
+        coverPreviewURL =
+            $"data:{coverImage.ContentType};base64,{Convert.ToBase64String(buffer)}";
     }
 
     private async Task ValidateAndSaveAsync()
@@ -64,8 +72,7 @@ public partial class NewCategory : ComponentBase
         try
         {
             var isCoverUploaded = await SetCoverImageAsync();
-            if (isCoverUploaded)
-                await SetIconAsync();
+            if (isCoverUploaded) SetIcon();
             isValid = await categoryService.CreateCategoryAsync(newCategory);
             if (isValid)
                 navigationManager.NavigateTo("/", true);

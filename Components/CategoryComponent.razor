@@ -1,13 +1,12 @@
 @using Category = ValgfagPortfolio.Model.Category
+@rendermode InteractiveServer
 @inject ICategoryService service
+@inject NavigationManager nav
 <MudCard>
     <MudCardMedia Image="@Category.CoverImgPath" Height="200"></MudCardMedia>
     <MudCardContent>
         <MudText Typo="Typo.h3">@Category.Title
-            @if (Category.LogoImgPath is not null)
-            {
-                <MudIcon Icon="@Category.LogoImgPath"></MudIcon>
-            }
+            <MudImage Src="@Category.LogoImgPath" Height="24" Width="24"></MudImage>
         </MudText>
         <MudText Typo="Typo.body1">@Category.Description</MudText>
     </MudCardContent>
@@ -34,10 +33,12 @@
     private async Task DeleteCategoryAsync()
     {
         await service.DeleteCategoryAsync(Category);
+        nav.Refresh( true);
     }
 
     private async Task EditCategoryAsync()
     {
         throw new NotImplementedException();
+        nav.Refresh();
     }
 }

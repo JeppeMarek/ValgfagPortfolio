@@ -27,7 +27,13 @@
                         </MudButton>
                     </ActivatorContent>
                 </MudFileUpload>
-                <MudImage Src="@newCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown"></MudImage>
+                @if (!string.IsNullOrEmpty(coverPreviewURL))
+                {
+                    <MudImage Src="@coverPreviewURL"
+                              Width="200"
+                              Class="mt-2"
+                              Alt="Cover preview"/>
+                }
 
                 <MudRadioGroup @bind-Value="selectedIcon">
                     <MudRadio Value="@("Log")" Color="Color.Primary">Log</MudRadio>
