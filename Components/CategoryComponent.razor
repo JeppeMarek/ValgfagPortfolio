@@ -1,13 +1,28 @@
 @using Category = ValgfagPortfolio.Model.Category
+@inject ICategoryService service
 <MudCard>
-    <MudCardMedia Image=@Category.CoverImgPath Height="200"></MudCardMedia>
+    <MudCardMedia Image="@Category.CoverImgPath" Height="200"></MudCardMedia>
     <MudCardContent>
-        <MudText Typo="Typo.h3">@Category.Title</MudText>
+        <MudText Typo="Typo.h3">@Category.Title
+            @if (Category.LogoImgPath is not null)
+            {
+                <MudIcon Icon="@Category.LogoImgPath"></MudIcon>
+            }
+        </MudText>
         <MudText Typo="Typo.body1">@Category.Description</MudText>
     </MudCardContent>
     <MudCardActions>
         <MudButton Variant="Variant.Text" @Color="Color.Primary">
             <a href="/category-details/@Category.Id">Åbn kategori</a>
+            <AuthorizeView>
+                <MudButton OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
+                    kategori
+                </MudButton>
+
+                <MudButton OnClick="@EditCategoryAsync" StartIcon="@Icons.Material.Filled.Edit">Rediger
+                    kategori
+                </MudButton>
+            </AuthorizeView>
         </MudButton>
     </MudCardActions>
 </MudCard>
@@ -15,4 +30,14 @@
 @code
 {
     [Parameter] public Category Category { get; set; }
+
+    private async Task DeleteCategoryAsync()
+    {
+        await service.DeleteCategoryAsync(Category);
+    }
+
+    private async Task EditCategoryAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
