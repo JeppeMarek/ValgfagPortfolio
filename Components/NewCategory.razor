@@ -8,7 +8,7 @@
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
-            <MudForm @ref="form" Model="@newCategory" @bind-IsValid="@success"
+            <MudForm @ref="form" Model="@newCategory" @bind-IsValid="@isValid"
                      @bind-Errors="@errors">
                 <MudTextField T="string" Label="Titel" @bind-Value="newCategory.Title"
                               Required="true"
@@ -17,8 +17,7 @@
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
                               Required="false"/>
                 <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
-                               OnFilesChanged="OnCoverImageSelected"
-                >
+                               OnFilesChanged="OnCoverImageSelected">
                     <ActivatorContent>
                         <MudButton
                             Variant="Variant.Filled"
@@ -28,14 +27,21 @@
                         </MudButton>
                     </ActivatorContent>
                 </MudFileUpload>
-                <MudTextField T="string" Label="Logo" @bind-Value="newCategory
-                .LogoImgPath" HelperText="Skriv sti til 
-                billede. anden implementering kommer"></MudTextField>
+                <MudImage Src="@newCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown"></MudImage>
+
+                <MudRadioGroup @bind-Value="selectedIcon">
+                    <MudRadio Value="@("Log")" Color="Color.Primary">Log</MudRadio>
+                    <MudRadio Value="@("Project")" Color="Color.Secondary">Project</MudRadio>
+                    <MudRadio Value="@("Diverse")">Diverse</MudRadio>
+                    <MudButton OnClick="@ResetRadioIconAsync">Fjern valg</MudButton>
+                </MudRadioGroup>
+
             </MudForm>
+
         </MudPaper>
         <MudPaper Class="pa-4 mt-4">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
-                       OnClick="@ValidateAndSaveAsync">Validate
+                       OnClick="@ValidateAndSaveAsync">Gem
             </MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
                        OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset

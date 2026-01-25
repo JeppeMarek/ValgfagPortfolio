@@ -1,0 +1,18 @@
+@using Category = ValgfagPortfolio.Model.Category
+<MudCard>
+    <MudCardMedia Image=@Category.CoverImgPath Height="200"></MudCardMedia>
+    <MudCardContent>
+        <MudText Typo="Typo.h3">@Category.Title</MudText>
+        <MudText Typo="Typo.body1">@Category.Description</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" @Color="Color.Primary">
+            <a href="/category-details/@Category.Id">Åbn kategori</a>
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code
+{
+    [Parameter] public Category Category { get; set; }
+}

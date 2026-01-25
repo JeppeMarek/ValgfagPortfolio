@@ -11,12 +11,45 @@ public partial class NewCategory : ComponentBase
     private IBrowserFile? coverImage;
     private string[] errors = { };
     private MudForm form;
-    private bool success;
+    private bool isValid;
+    private string? selectedIcon { get; set; }
 
     private async Task ResetFormAndValidationAsync()
     {
         await form.ResetAsync();
         form.ResetValidation();
+    }
+
+    private async Task ResetRadioIconAsync()
+    {
+        selectedIcon = null;
+    }
+
+    private async Task SetIconAsync()
+    {
+        switch (selectedIcon)
+        {
+            case null: newCategory.LogoImgPath = null; break;
+            case "Log": newCategory.LogoImgPath = "Icons.Material.Filled.Assignment"; break;
+            case "Project": newCategory.LogoImgPath = "Icons.Material.Filled.DynamicFeed"; break;
+            case "Diverse": newCategory.LogoImgPath = "Icons.Material.Filled.Assignment"; break;
+        }
+    }
+
+    private async Task<bool> SetCoverImageAsync()
+    {
+        var isUploaded = false;
+        if (coverImage is not null)
+            newCategory.CoverImgPath =
+                await imageService.UploadImageAsync(coverImage,
+                    "categories");
+        isUploaded = true;
+        return isUploaded;
+    }
+
+    private void OnCoverImageSelected(InputFileChangeEventArgs e)
+    {
+        coverImage = e.File;
     }
 
     private async Task ValidateAndSaveAsync()
@@ -28,24 +61,16 @@ public partial class NewCategory : ComponentBase
 
         try
         {
-            if (coverImage is not null)
-                newCategory.CoverImgPath =
-                    await imageService.UploadImageAsync(coverImage,
-                        "categories");
-
-            success = await categoryService.CreateCategoryAsync(newCategory);
-
-            if (success)
+            var isCoverUploaded = await SetCoverImageAsync();
+            if (isCoverUploaded)
+                await SetIconAsync();
+            isValid = await categoryService.CreateCategoryAsync(newCategory);
+            if (isValid)
                 navigationManager.NavigateTo("/", true);
         }
         catch (Exception ex)
         {
             errors = [ex.Message];
         }
-    }
-
-    private void OnCoverImageSelected(InputFileChangeEventArgs e)
-    {
-        coverImage = e.File;
     }
 }

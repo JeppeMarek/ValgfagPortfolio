@@ -5,6 +5,7 @@
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <header>Jeppe Marek Portfolio</header>
+
 <AuthorizeView>
     <Authorized>
         <MudNavLink Href="/category/new"
@@ -22,19 +23,12 @@
         foreach (var cat in categories)
         {
             <MudItem>
-                <MudCard>
-                    <MudCardMedia Image=@cat.CoverImgPath Height="200"></MudCardMedia>
-                    <MudCardContent>
-                        <MudText Typo="Typo.h3">@cat.Title</MudText>
-                        <MudText Typo="Typo.body1">@cat.Description</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" @Color="Color.Primary">
-                            <a href="/category-details/@cat.Id">Åbn kategori</a>
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
+                <CategoryComponent Category=@cat></CategoryComponent>
             </MudItem>
         }
+    }
+    else
+    {
+        <MudText>Ingen kategorier fundet</MudText>
     }
 </MudGrid>
