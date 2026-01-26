@@ -8,19 +8,15 @@
 
 @* Needed for snackbars *@
 <MudSnackbarProvider/>
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
-    <article class="content px-4">
+<MudThemeProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudSpacer/>
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
+    </MudAppBar>
+    <MudMainContent>
         @Body
-    </article>
-</div>
-<footer style="align-items: center">
-    <div role="toolbar">
-        <p>Hjemmeside af
-            <span><a href="https://github.com/JeppeMarek">Jeppe Marek</a></span>
-        </p>
-        <p>LinkedIn</p>
-    </div>
-</footer>
+    </MudMainContent>
+</MudLayout>

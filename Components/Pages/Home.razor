@@ -17,12 +17,12 @@
 </AuthorizeView>
 
 <br/>
-<MudGrid Justify="Justify.Center" Spacing="10">
+<MudGrid>
     @if (!categories.IsNullOrEmpty())
     {
         foreach (var cat in categories)
         {
-            <MudItem>
+            <MudItem sm="5">
                 <CategoryComponent Category=@cat></CategoryComponent>
             </MudItem>
         }
