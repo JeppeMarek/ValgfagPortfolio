@@ -4,15 +4,9 @@
 @inject ICategoryService categoryService
 
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
-<header>Jeppe Marek Portfolio</header>
-
 <AuthorizeView>
     <Authorized>
-        <MudNavLink Href="/category/new"
-                    Icon="@Icons.Material.TwoTone.AddCircle"
-                    IconColor="Color.Primary">
-            Ny Kategori
-        </MudNavLink>
+        <MudButton Href="/category/new/" StartIcon="@Icons.Material.Filled.AddBox">Tilføj ny kategori</MudButton>
     </Authorized>
 </AuthorizeView>
 
@@ -23,7 +17,7 @@
         foreach (var cat in categories)
         {
             <MudItem sm="5">
-                <CategoryComponent Category=@cat></CategoryComponent>
+                <CategoryComponent SelectedCategory=@cat></CategoryComponent>
             </MudItem>
         }
     }

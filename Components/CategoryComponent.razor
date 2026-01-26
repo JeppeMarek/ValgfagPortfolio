@@ -4,26 +4,26 @@
 @inject NavigationManager nav
 <MudPaper>
     <MudCard>
-        <MudImage Src="@Category.CoverImgPath" Class="rounded-lg" ObjectFit="ObjectFit.Cover" Height="200" 
+        <MudImage Src="@SelectedCategory.CoverImgPath" Class="rounded-lg" ObjectFit="ObjectFit.Cover" Height="200"
                   ObjectPosition="ObjectPosition.Center"
-                  ></MudImage>
+        ></MudImage>
         <MudCardContent>
-            <MudText Typo="Typo.h3">@Category.Title
-                <MudImage Src="@Category.LogoImgPath" Height="36" Width="36"></MudImage>
+            <MudText Typo="Typo.h3">@SelectedCategory.Title
+                <MudImage Src="@SelectedCategory.LogoImgPath" Height="36" Width="36"></MudImage>
             </MudText>
-            @if (!Category.Description.IsNullOrEmpty())
+            @if (!SelectedCategory.Description.IsNullOrEmpty())
             {
-                @if (Category.Description.Length >= 200)
+                @if (SelectedCategory.Description.Length >= 200)
                 {
                     <MudButton OnClick="@OnExpandCollapseClick">@(expanded ? "Fold beskrivelse" : "Udvid beskrivelse")
                     </MudButton>
                     <MudDivider/>
-                    <MudCollapse Expanded="expanded">@Category.Description</MudCollapse>
+                    <MudCollapse Expanded="expanded">@SelectedCategory.Description</MudCollapse>
                 }
                 else
                 {
                     <MudText
-                        Typo="Typo.body1">@(Category.Description.IsNullOrEmpty() ? "" : Category.Description)</MudText>
+                        Typo="Typo.body1">@(SelectedCategory.Description.IsNullOrEmpty() ? "" : SelectedCategory.Description)</MudText>
                 }
             }
             else
@@ -33,13 +33,13 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Text" @Color="Color.Primary">
-                <a href="/category-details/@Category.Id">Åbn kategori</a>
+                <a href="/category/@SelectedCategory.Id">Åbn kategori</a>
                 <AuthorizeView>
                     <MudButton OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
                         kategori
                     </MudButton>
 
-                    <MudButton OnClick="@EditCategoryAsync" StartIcon="@Icons.Material.Filled.Edit">Rediger
+                    <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">Rediger
                         kategori
                     </MudButton>
                 </AuthorizeView>
@@ -50,18 +50,18 @@
 
 @code
 {
-    [Parameter] public Category Category { get; set; }
+    [Parameter] public Category SelectedCategory { get; set; }
     private bool expanded;
 
     private async Task DeleteCategoryAsync()
     {
-        await service.DeleteCategoryAsync(Category);
+        await service.DeleteCategoryAsync(SelectedCategory);
         nav.Refresh(true);
     }
 
     private async Task EditCategoryAsync()
     {
-        throw new NotImplementedException();
+        nav.NavigateTo($"/category/edit/{SelectedCategory.Id}");
         nav.Refresh();
     }
 

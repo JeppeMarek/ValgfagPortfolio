@@ -1,15 +1,66 @@
-@page "/EditCategory{id:int}"
+@page "/category/edit/{Id:int}"
 @rendermode InteractiveServer
 
-@inject ICategoryService service
-<h3>EditCategory </h3>
+@inject ICategoryService categoryService
+@inject IImageService imageService
+@inject NavigationManager navigationManager
 
-@code {
-    [Parameter] public int Id { get; set; }
-    private Model.Category selectedCategory { get; set; }
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" Model="@selectedCategory" @bind-IsValid="@isValid"
+                     @bind-Errors="@errors">
+                <MudTextField T="string" Label="Titel" @bind-Value="selectedCategory.Title"
+                              Required="true"
+                              RequiredError="Kategori titel er obligatorisk!"/>
 
-    private async Task setSelectedCategoryAsync()
-    {
-        selectedCategory = await service.GetCategoryByIdAsync(Id);
-    }
-}
+                <MudTextField T="string" Label="Beskrivelse" @bind-Value="selectedCategory.Description"
+                              Required="false" MaxLength="200"/>
+                <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
+                               OnFilesChanged="OnCoverImageSelected">
+                    <ActivatorContent>
+                        <MudButton
+                            Variant="Variant.Filled"
+                            Color="Color.Primary"
+                            StartIcon="@Icons.Material.Filled.CloudUpload">
+                            Upload cover billede
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+                @if (!string.IsNullOrEmpty(coverPreviewURL))
+                {
+                    <MudImage Src="@(string.IsNullOrEmpty(coverPreviewURL) ? "" : selectedCategory.CoverImgPath)"
+                              Width="200"
+                              Class="mt-2"
+                              Alt="Cover preview"/>
+                }
+
+                <MudRadioGroup @bind-Value="selectedIcon">
+                    <MudRadio Value="@("Log")" Color="Color.Primary">Log</MudRadio>
+                    <MudRadio Value="@("Project")" Color="Color.Secondary">Project</MudRadio>
+                    <MudRadio Value="@("Diverse")">Diverse</MudRadio>
+                    <MudButton OnClick="@ResetRadioIconAsync">Fjern valg</MudButton>
+                </MudRadioGroup>
+
+            </MudForm>
+
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
+                       OnClick="@ValidateAndSaveAsync">Gem
+            </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
+                       OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+            @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>

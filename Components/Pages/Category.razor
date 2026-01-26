@@ -1,4 +1,4 @@
-@page "/category-details/{Id:int}"
+@page "/category/{Id:int}"
 @inject ICategoryService categoryService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -47,7 +47,7 @@ else
     [Parameter] public int Id { get; set; }
     private Model.Category ShowCategory;
     private List<Post>? posts;
-    
+
     // TODO implement post component
     private void OnRowClick()
     {
