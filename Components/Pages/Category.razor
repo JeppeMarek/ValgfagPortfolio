@@ -4,9 +4,9 @@
 @rendermode InteractiveServer
 
 <h3>Category</h3>
-@if (category != null)
+@if (ShowCategory != null)
 {
-    <h2>@category.Title</h2>
+    <h2>@ShowCategory.Title</h2>
     <p>@posts?.Count</p>
     <table class="table table-hover bg-white">
         <thead>
@@ -45,10 +45,9 @@ else
 
 @code {
     [Parameter] public int Id { get; set; }
-    private Model.Category category;
+    private Model.Category ShowCategory;
     private List<Post>? posts;
-
-    // Click event - in testing it should redirect to home page.
+    
     // TODO implement post component
     private void OnRowClick()
     {
@@ -59,8 +58,8 @@ else
     {
         try
         {
-            category = await categoryService.GetCategoryByIdAsync(Id);
-            posts = category?.Posts ?? new List<Post>();
+            ShowCategory = await categoryService.GetCategoryByIdAsync(Id);
+            posts = ShowCategory?.Posts ?? new List<Post>();
         }
         catch (Exception e)
         {

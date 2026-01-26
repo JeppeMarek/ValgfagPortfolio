@@ -1,0 +1,15 @@
+@page "/EditCategory{id:int}"
+@rendermode InteractiveServer
+
+@inject ICategoryService service
+<h3>EditCategory </h3>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Model.Category selectedCategory { get; set; }
+
+    private async Task setSelectedCategoryAsync()
+    {
+        selectedCategory = await service.GetCategoryByIdAsync(Id);
+    }
+}
