@@ -15,7 +15,7 @@
                               RequiredError="Kategori titel er obligatorisk!"/>
 
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
-                              Required="false"/>
+                              Required="false" MaxLength="200"/>
                 <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
                                OnFilesChanged="OnCoverImageSelected">
                     <ActivatorContent>

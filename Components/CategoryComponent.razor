@@ -1,14 +1,33 @@
+@using Microsoft.IdentityModel.Tokens
 @using Category = ValgfagPortfolio.Model.Category
 @rendermode InteractiveServer
 @inject ICategoryService service
 @inject NavigationManager nav
 <MudCard>
-    <MudCardMedia Image="@Category.CoverImgPath" Height="200"></MudCardMedia>
+    <MudImage Src="@Category.CoverImgPath" Class="rounded-lg" ObjectFit="ObjectFit.Cover" Height="200"
+              Width="700"></MudImage>
     <MudCardContent>
         <MudText Typo="Typo.h3">@Category.Title
-            <MudImage Src="@Category.LogoImgPath" Height="24" Width="24"></MudImage>
+            <MudImage Src="@Category.LogoImgPath" Height="36" Width="36"></MudImage>
         </MudText>
-        <MudText Typo="Typo.body1">@Category.Description</MudText>
+        @if (!Category.Description.IsNullOrEmpty())
+        {
+            @if (Category.Description.Length > 250)
+            {
+                <MudButton OnClick="@OnExpandCollapseClick">@(expanded ? "Fold beskrivelse" : "Udvid beskrivelse")
+                </MudButton>
+                <MudDivider/>
+                <MudCollapse Expanded="expanded">@Category.Description</MudCollapse>
+            }
+            else
+            {
+                <MudText Typo="Typo.body1">@(Category.Description.IsNullOrEmpty() ? "" : Category.Description)</MudText>
+            }
+        }
+        else
+        {
+            <MudText Typo="Typo.body2" Color="Color.Info">Ingen beskrivelse</MudText>
+        }
     </MudCardContent>
     <MudCardActions>
         <MudButton Variant="Variant.Text" @Color="Color.Primary">
@@ -29,16 +48,22 @@
 @code
 {
     [Parameter] public Category Category { get; set; }
+    private bool expanded;
 
     private async Task DeleteCategoryAsync()
     {
         await service.DeleteCategoryAsync(Category);
-        nav.Refresh( true);
+        nav.Refresh(true);
     }
 
     private async Task EditCategoryAsync()
     {
         throw new NotImplementedException();
         nav.Refresh();
+    }
+
+    private void OnExpandCollapseClick()
+    {
+        expanded = !expanded;
     }
 }

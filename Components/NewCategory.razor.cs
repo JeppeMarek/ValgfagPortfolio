@@ -65,7 +65,6 @@ public partial class NewCategory : ComponentBase
     private async Task ValidateAndSaveAsync()
     {
         await form.Validate();
-
         if (!form.IsValid)
             return;
 
