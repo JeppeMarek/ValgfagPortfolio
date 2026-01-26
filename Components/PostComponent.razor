@@ -1,0 +1,72 @@
+@page "/posts/{Id:int}"
+@using Microsoft.Build.Framework
+@using Radzen.Blazor
+@using Variant = MudBlazor.Variant
+@inject IPostService Service
+@inject NavigationManager nav
+
+<MudPaper>
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h3">@selectedPost.Title</MudText>
+            <RadzenMarkdown Text="@selectedPost.Content" AllowHtml="@allowHTML"></RadzenMarkdown>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" @Color="Color.Primary">
+                <a href="/posts/@selectedPost.Id">Åbn opslag</a>
+                <AuthorizeView>
+                    <MudButton OnClick="@OnDeleteClick" StartIcon="@Icons.Material.Filled.Delete">Slet
+                        opslag
+                    </MudButton>
+                    <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditPostAsync">Rediger
+                        opslag
+                    </MudButton>
+                </AuthorizeView>
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudPaper>
+
+@code {
+    [Inject] private IDialogService DialogService { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Required] public Post selectedPost { get; set; } = new();
+    private int categoryId { get; set; }
+    private bool? isConfirmed;
+    private readonly bool allowHTML = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            selectedPost = await Service.GetPostByIdAsync(Id);
+            categoryId = selectedPost.CategoryId;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task DeletePostAsync()
+    {
+        await Service.DeletePostAsync(selectedPost);
+        nav.NavigateTo($"/category/{categoryId}");
+    }
+
+    private async Task EditPostAsync()
+    {
+        nav.NavigateTo($"/posts/edit/{Id}");
+    }
+
+    private async void OnDeleteClick()
+    {
+        isConfirmed = await DialogService.ShowMessageBox(
+            "ADVARSEL",
+            "Det er permanent at slette",
+             "Delete", cancelText: "Cancel");
+        if (isConfirmed == true) await DeletePostAsync();
+        StateHasChanged();
+    }
+
+}

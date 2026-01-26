@@ -1,9 +1,13 @@
 @page "/category/{Id:int}"
+@using Microsoft.IdentityModel.Tokens
 @inject ICategoryService categoryService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <h3>Category</h3>
+<AuthorizeView>
+    <MudButton Href="/posts/new" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
+</AuthorizeView>
 @if (ShowCategory != null)
 {
     <h2>@ShowCategory.Title</h2>
@@ -21,19 +25,26 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var post in posts ?? new List<Post>())
+        @if (!posts.IsNullOrEmpty())
         {
-            <tr @onclick="@(() => OnRowClick())" style="cursor: pointer">
-                <td>@post.Title</td>
-                <td>@post.Content</td>
-                <td>@post.DateCreated</td>
-                <td>@post.DateEdited</td>
-                <td>
-                    <MudButton OnClick="OnRowClick"
-                               StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
-                </td>
+            @foreach (var post in posts)
+            {
+                <tr @onclick="@(() => OnRowClick())" style="cursor: pointer">
+                    <td>@post.Title</td>
+                    <td>@post.Content</td>
+                    <td>@post.DateCreated</td>
+                    <td>@post.DateEdited</td>
+                    <td>
+                        <MudButton OnClick="OnRowClick"
+                                   StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
+                    </td>
 
-            </tr>
+                </tr>
+            }
+        }
+        else
+        {
+            <MudText Typo="Typo.body2">Ingen opslag endnu..</MudText>
         }
         </tbody>
     </table>
