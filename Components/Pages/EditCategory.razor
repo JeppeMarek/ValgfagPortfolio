@@ -16,6 +16,7 @@
 
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="selectedCategory.Description"
                               Required="false" MaxLength="200"/>
+                
                 <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
                                OnFilesChanged="OnCoverImageSelected">
                     <ActivatorContent>
@@ -27,6 +28,7 @@
                         </MudButton>
                     </ActivatorContent>
                 </MudFileUpload>
+                
                 @if (!string.IsNullOrEmpty(coverPreviewURL))
                 {
                     <MudImage Src="@(string.IsNullOrEmpty(coverPreviewURL) ? "" : selectedCategory.CoverImgPath)"
