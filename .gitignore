@@ -7,4 +7,4 @@ appsettings.Development.json
 appsettings.json
 /Migrations/
 /wwwroot/uploads/
-/Data/AdminSeed.cs
+AdminSeed.cs
