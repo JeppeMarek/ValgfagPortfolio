@@ -10,21 +10,30 @@
 @* Needed for snackbars *@
 <MudSnackbarProvider/>
 <MudThemeProvider/>
+@*Actual layout*@
+<div class="layout-container">
+    <MudLayout>
+        <MudAppBar Elevation="1" Color="Color.Tertiary">
+            <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/">Portfolio</MudButton>
+            <MudSpacer/>
+            <MudButtonGroup>
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                               Href="https://github.com/JeppeMarek"></MudIconButton>
+                <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
+                               Href="www.linkedin.com/in/jeppe-marek-b775b6328"></MudIconButton>
+            </MudButtonGroup>
+        </MudAppBar>
 
-<MudLayout>
-    <MudAppBar Elevation="1" Color="Color.Tertiary">
-        <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/">Portfolio</MudButton>
-        <MudSpacer/>
-        <MudButtonGroup>
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/JeppeMarek"></MudIconButton>
-            <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
-                           Href="www.linkedin.com/in/jeppe-marek-b775b6328"></MudIconButton>
-        </MudButtonGroup>
-    </MudAppBar>
-    <MudMainContent>
-        <MudContainer>
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+        <MudMainContent Class="main-content">
+            <MudContainer MaxWidth="MaxWidth.Large" Class="content-wrapper">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+    </MudLayout>
 
+    <footer class="footer">
+        <MudText Typo="Typo.body2">
+            © @DateTime.Now.Year · Webpage by <a href="https://github.com/JeppeMarek">Jeppe Marek</a>
+        </MudText>
+    </footer>
+</div>
