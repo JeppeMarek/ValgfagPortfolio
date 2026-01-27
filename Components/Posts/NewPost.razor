@@ -1,4 +1,5 @@
 @page "/category/{CategoryId:int}/posts/new"
+@using System.Runtime.InteropServices.JavaScript
 @rendermode InteractiveServer
 @inject IPostService Service
 @inject NavigationManager Nav
@@ -44,8 +45,8 @@
     private void AddDateAndCategory()
     {
         newPost.CategoryId = CategoryId;
-        newPost.DateCreated = DateTime.Now;
-        newPost.DateEdited = DateTime.Now;
+        newPost.DateCreated = DateTime.Today;
+        newPost.DateEdited = DateTime.Today;
     }
 
     private async Task ValidateAndSaveAsync()
