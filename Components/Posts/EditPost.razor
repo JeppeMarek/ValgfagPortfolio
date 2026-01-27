@@ -1,43 +1,74 @@
-@page "/posts/edit/{Id:int}"
+@page "/posts/{Id:int}/edit"
 @rendermode InteractiveServer
-@using System.ComponentModel.DataAnnotations
-@using Radzen.Blazor
-@using AlignItems = Radzen.AlignItems
-@using Orientation = Radzen.Orientation
 @inject IPostService Service
 @inject NavigationManager Nav
 
-<RadzenStack Gap="3rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-    <RadzenLabel Component="html">Allow HTML</RadzenLabel>
-    <RadzenSwitch @bind-Value="@allowHtml"/>
-</RadzenStack>
-<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem">
-    <RadzenColumn SizeMD="6">
 
-        @* ReSharper disable Html.AttributesQuotes *@
-        <RadzenTextArea Value=@markdown @oninput="@OnInput" Style="width: 100%; height: 400px"/>
-        @* ReSharper restore Html.AttributesQuotes *@
-    </RadzenColumn>
-    <RadzenColumn SizeMD="6">
-        <RadzenMarkdown Text="@markdown" AllowHtml="@allowHtml"/>
-    </RadzenColumn>
-</RadzenRow>
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper class="pa-4">
+            <MudForm @ref="form" Model="@selectedPost" @bind-IsValid="@isValid" @bind-Errors="@errors">
+                <MudTextField T="string" Label="Titel" @bind-Value="selectedPost.Title"
+                              Required="true"
+                              RequiredError="Opslags titel er obligatorisk!"></MudTextField>
+
+                <MudText Typo="Typo.subtitle2">Skriv opslagets indhold</MudText>
+                <MarkdownComponent @bind-MarkdownContent="@selectedPost.Content"></MarkdownComponent>
+            </MudForm>
+            <MudPaper Class="pa-4 mt-4">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
+                           OnClick="@ValidateAndSaveAsync">Gem
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
+                           OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset
+                </MudButton>
+            </MudPaper>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
     [Parameter] public int Id { get; set; }
-    [Required] private Post SelectedPost { get; set; } = new();
-    bool allowHtml = true;
-    private string markdown;
+    private Post selectedPost = new();
+    private MudForm form;
+    private string[] errors = { };
+    private bool isValid;
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedPost = await Service.GetPostByIdAsync(Id);
-        markdown = SelectedPost == null ? "" : SelectedPost.Content;
+        selectedPost = await Service.GetPostByIdAsync(Id);
     }
 
-    private void OnInput(ChangeEventArgs args)
+    private async Task ResetFormAndValidationAsync()
     {
-        markdown = args.Value.ToString();
+        await form.ResetAsync();
+        form.ResetValidation();
+    }
+
+    private void UpdateDate()
+    {
+        selectedPost.DateEdited = DateTime.Today;
+    }
+
+    private async Task ValidateAndSaveAsync()
+    {
+        UpdateDate();
+        await form.Validate();
+        isValid = form.IsValid;
+
+        if (!isValid) return;
+        try
+        {
+            isValid = await Service.UpdatePostAsync(selectedPost);
+            if (isValid)
+            {
+                Nav.NavigateTo($"/category/{selectedPost.CategoryId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            errors = [ex.Message];
+        }
     }
 
 }

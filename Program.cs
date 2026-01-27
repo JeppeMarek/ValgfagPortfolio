@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 using Radzen;
 using ValgfagPortfolio.Components;
@@ -9,6 +10,7 @@ using ValgfagPortfolio.Model;
 using ValgfagPortfolio.Persistence.Interfaces;
 using ValgfagPortfolio.Persistence.Repositories;
 using ValgfagPortfolio.Services;
+using DialogService = MudBlazor.DialogService;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -24,6 +26,7 @@ builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+
 
 // MudBlazor
 builder.Services.AddMudServices();

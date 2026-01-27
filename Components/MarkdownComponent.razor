@@ -9,7 +9,7 @@
 <RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem">
     <RadzenColumn SizeMD="6">
         @* ReSharper disable Html.AttributesQuotes *@
-        <RadzenTextArea Value="@MarkdownContent"
+        <RadzenTextArea @class="overflow-scroll" Value="@MarkdownContent"
                         ValueChanged="OnValueChanged"
                         @oninput=@OnInput
                         Style="width: 100%; height: 400px"/>

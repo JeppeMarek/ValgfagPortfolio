@@ -10,13 +10,13 @@
         <MudCardContent>
             <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
             <MudGrid Spacing="8" Justify="Justify.SpaceEvenly">
-            <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag oprettet: @createdDate</MudText>
-            <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret: @lastEditedDate</MudText>
+                <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag oprettet: @createdDate</MudText>
+                <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret: @lastEditedDate</MudText>
             </MudGrid>
-            <MudPaper  Class="border-secondary-subtle border-4 mt-5">
-            <RadzenMarkdown AllowHtml="@allowHTML">
-                @selectedPost.Content
-            </RadzenMarkdown>
+            <MudPaper Class="border-secondary-subtle border-4 mt-5">
+                <RadzenMarkdown AllowHtml="@allowHTML">
+                    @selectedPost.Content
+                </RadzenMarkdown>
             </MudPaper>
         </MudCardContent>
         <MudCardActions>
@@ -33,10 +33,9 @@
 </MudPaper>
 
 @code {
-    [Inject] private IDialogService DialogService { get; set; }
     [Parameter] public int Id { get; set; }
     [Required] public Post selectedPost { get; set; } = new();
-    
+
     private int categoryId { get; set; }
     private string? createdDate;
     private string? lastEditedDate;
@@ -51,7 +50,6 @@
             categoryId = selectedPost.CategoryId;
             createdDate = selectedPost.DateCreated.ToString("d");
             lastEditedDate = selectedPost.DateEdited.ToString("d");
-
         }
         catch (Exception e)
         {
@@ -67,17 +65,12 @@
 
     private async Task EditPostAsync()
     {
-        nav.NavigateTo($"/posts/edit/{Id}");
+        nav.NavigateTo($"/posts/{Id}/edit");
     }
 
-    private async void OnDeleteClick()
+    private async Task OnDeleteClick()
     {
-        isConfirmed = await DialogService.ShowMessageBox(
-            "ADVARSEL",
-            "Det er permanent at slette",
-            "Delete", cancelText: "Cancel");
-        if (isConfirmed == true) await DeletePostAsync();
-        StateHasChanged();
+        await DeletePostAsync();
     }
 
 }
