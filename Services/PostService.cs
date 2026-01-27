@@ -44,14 +44,14 @@ public class PostService : IPostService
 
     public async Task<bool> UpdatePostAsync(Post post)
     {
-        var success = post != null || post.Id !=-1;
+        var success = post != null || post.Id != -1;
         if (success) await repository.UpdateEntityAsync(post);
         return success;
     }
 
     public async Task<bool> DeletePostAsync(Post post)
     {
-        bool success = post != null || post.Id != -1;
+        var success = post != null || post.Id != -1;
         if (success) await repository.DeleteEntityAsync(post);
         return success;
     }

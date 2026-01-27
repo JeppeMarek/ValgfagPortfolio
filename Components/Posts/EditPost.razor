@@ -1,0 +1,43 @@
+@page "/posts/edit/{Id:int}"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using Radzen.Blazor
+@using AlignItems = Radzen.AlignItems
+@using Orientation = Radzen.Orientation
+@inject IPostService Service
+@inject NavigationManager Nav
+
+<RadzenStack Gap="3rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+    <RadzenLabel Component="html">Allow HTML</RadzenLabel>
+    <RadzenSwitch @bind-Value="@allowHtml"/>
+</RadzenStack>
+<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem">
+    <RadzenColumn SizeMD="6">
+
+        @* ReSharper disable Html.AttributesQuotes *@
+        <RadzenTextArea Value=@markdown @oninput="@OnInput" Style="width: 100%; height: 400px"/>
+        @* ReSharper restore Html.AttributesQuotes *@
+    </RadzenColumn>
+    <RadzenColumn SizeMD="6">
+        <RadzenMarkdown Text="@markdown" AllowHtml="@allowHtml"/>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Required] private Post SelectedPost { get; set; } = new();
+    bool allowHtml = true;
+    private string markdown;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedPost = await Service.GetPostByIdAsync(Id);
+        markdown = SelectedPost == null ? "" : SelectedPost.Content;
+    }
+
+    private void OnInput(ChangeEventArgs args)
+    {
+        markdown = args.Value.ToString();
+    }
+
+}

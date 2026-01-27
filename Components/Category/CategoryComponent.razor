@@ -28,22 +28,23 @@
             }
             else
             {
-                <MudText Typo="Typo.body2" Color="Color.Info">Ingen beskrivelse</MudText>
+                <MudText>Ingen kategorier fundet denne gang</MudText>
             }
         </MudCardContent>
         <MudCardActions>
-            <MudButton Variant="Variant.Text" @Color="Color.Primary">
+            <MudButton Variant="Variant.Text" Color="Color.Primary">
                 <a href="/category/@SelectedCategory.Id">Åbn kategori</a>
-                <AuthorizeView>
-                    <MudButton OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
-                        kategori
-                    </MudButton>
-
-                    <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">Rediger
-                        kategori
-                    </MudButton>
-                </AuthorizeView>
             </MudButton>
+            <AuthorizeView>
+                <MudButton OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
+                    kategori
+                </MudButton>
+
+                <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">Rediger
+                    kategori
+                </MudButton>
+            </AuthorizeView>
+
         </MudCardActions>
     </MudCard>
 </MudPaper>

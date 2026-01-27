@@ -1,7 +1,7 @@
 @page "/posts/{Id:int}"
 @using Microsoft.Build.Framework
 @using Radzen.Blazor
-@using Variant = MudBlazor.Variant
+@rendermode InteractiveServer
 @inject IPostService Service
 @inject NavigationManager nav
 
@@ -9,20 +9,19 @@
     <MudCard>
         <MudCardContent>
             <MudText Typo="Typo.h3">@selectedPost.Title</MudText>
-            <RadzenMarkdown Text="@selectedPost.Content" AllowHtml="@allowHTML"></RadzenMarkdown>
+            <RadzenMarkdown AllowHtml="@allowHTML">
+                @selectedPost.Content
+            </RadzenMarkdown>
         </MudCardContent>
         <MudCardActions>
-            <MudButton Variant="Variant.Text" @Color="Color.Primary">
-                <a href="/posts/@selectedPost.Id">Åbn opslag</a>
-                <AuthorizeView>
-                    <MudButton OnClick="@OnDeleteClick" StartIcon="@Icons.Material.Filled.Delete">Slet
-                        opslag
-                    </MudButton>
-                    <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditPostAsync">Rediger
-                        opslag
-                    </MudButton>
-                </AuthorizeView>
-            </MudButton>
+            <AuthorizeView>
+                <MudButton OnClick="@OnDeleteClick" StartIcon="@Icons.Material.Filled.Delete">Slet
+                    opslag
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditPostAsync">Rediger
+                    opslag
+                </MudButton>
+            </AuthorizeView>
         </MudCardActions>
     </MudCard>
 </MudPaper>
@@ -37,6 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(selectedPost.Content);
         try
         {
             selectedPost = await Service.GetPostByIdAsync(Id);
@@ -64,7 +64,7 @@
         isConfirmed = await DialogService.ShowMessageBox(
             "ADVARSEL",
             "Det er permanent at slette",
-             "Delete", cancelText: "Cancel");
+            "Delete", cancelText: "Cancel");
         if (isConfirmed == true) await DeletePostAsync();
         StateHasChanged();
     }

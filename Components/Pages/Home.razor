@@ -6,12 +6,13 @@
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
 <AuthorizeView>
     <Authorized>
-        <MudButton Href="/category/new/" StartIcon="@Icons.Material.Filled.AddBox">Tilføj ny kategori</MudButton>
+        <MudButton Size="Size.Large" Href="/category/new/" StartIcon="@Icons.Material.Filled.AddBox">Tilføj ny
+            kategori
+        </MudButton>
     </Authorized>
 </AuthorizeView>
-
-<br/>
 <MudGrid>
+    <br/>
     @if (!categories.IsNullOrEmpty())
     {
         foreach (var cat in categories)
@@ -23,6 +24,6 @@
     }
     else
     {
-        <MudText>Ingen kategorier fundet</MudText>
+        <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Warning">Ingen kategorier fundet..</MudText>
     }
 </MudGrid>

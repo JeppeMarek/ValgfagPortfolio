@@ -13,7 +13,6 @@
 
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Tertiary">
-        <MudIconButton Href="/" Icon="@Icons.Material.Outlined.Home"></MudIconButton>
         <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/">Portfolio</MudButton>
         <MudSpacer/>
         <MudButtonGroup>
@@ -23,7 +22,9 @@
         </MudButtonGroup>
     </MudAppBar>
     <MudMainContent>
-        @Body
+        <MudContainer>
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 

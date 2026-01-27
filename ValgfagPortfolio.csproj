@@ -9,24 +9,38 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0" />
-        <PackageReference Include="MudBlazor" Version="8.15.0" />
-        <PackageReference Include="Radzen.Blazor" Version="8.7.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0"/>
+        <PackageReference Include="MudBlazor" Version="8.15.0"/>
+        <PackageReference Include="Radzen.Blazor" Version="8.7.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="wwwroot\Images\" />
+        <Folder Include="wwwroot\Images\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Components\Pages\Category\CategoryComponent.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Category\CategoryPage.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Category\EditCategory.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Category\NewCategory.razor"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Components\Category\CategoryComponent.razor"/>
+        <AdditionalFiles Include="Components\Category\CategoryPage.razor"/>
+        <AdditionalFiles Include="Components\Category\EditCategory.razor"/>
+        <AdditionalFiles Include="Components\Category\NewCategory.razor"/>
     </ItemGroup>
 
 </Project>

@@ -6,11 +6,11 @@
 
 <h3>Category</h3>
 <AuthorizeView>
-    <MudButton Href="/posts/new" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
+    <MudButton OnClick="@OnNewPostClicked" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
 </AuthorizeView>
-@if (ShowCategory != null)
+@if (selectedCategory != null)
 {
-    <h2>@ShowCategory.Title</h2>
+    <h2>@selectedCategory.Title</h2>
     <p>@posts?.Count</p>
     <table class="table table-hover bg-white">
         <thead>
@@ -29,7 +29,8 @@
         {
             @foreach (var post in posts)
             {
-                <tr @onclick="@(() => OnRowClick())" style="cursor: pointer">
+                postId = post.Id;
+                <tr @onclick="OnRowClick" style="cursor: pointer">
                     <td>@post.Title</td>
                     <td>@post.Content</td>
                     <td>@post.DateCreated</td>
@@ -56,27 +57,35 @@ else
 
 @code {
     [Parameter] public int Id { get; set; }
-    private Model.Category ShowCategory;
+    [CascadingParameter] public string CategoryTitle { get; set; }
+    private int postId;
+    private Category selectedCategory;
     private List<Post>? posts;
 
     // TODO implement post component
     private void OnRowClick()
     {
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo($"/posts/{postId}");
     }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            ShowCategory = await categoryService.GetCategoryByIdAsync(Id);
-            posts = ShowCategory?.Posts ?? new List<Post>();
+            selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
+            CategoryTitle = selectedCategory.Title;
+            posts = selectedCategory?.Posts ?? new List<Post>();
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             posts = new List<Post>();
         }
+    }
+
+    private void OnNewPostClicked()
+    {
+        navigationManager.NavigateTo($"/category/{Id}/posts/new");
     }
 
 }

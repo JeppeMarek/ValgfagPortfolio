@@ -1,0 +1,72 @@
+@page "/category/{CategoryId:int}/posts/new"
+@rendermode InteractiveServer
+@inject IPostService Service
+@inject NavigationManager Nav
+
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper class="pa-4">
+            <MudForm @ref="form" Model="@newPost" @bind-IsValid="@isValid" @bind-Errors="@errors">
+                <MudTextField T="string" Label="Titel" @bind-Value="newPost.Title"
+                              Required="true"
+                              RequiredError="Opslags titel er obligatorisk!"></MudTextField>
+
+                <MudText Typo="Typo.subtitle2">Skriv opslagets indhold</MudText>
+                <MarkdownComponent @bind-MarkdownContent="@newPost.Content"></MarkdownComponent>
+            </MudForm>
+            <MudPaper Class="pa-4 mt-4">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
+                           OnClick="@ValidateAndSaveAsync">Gem
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
+                           OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset
+                </MudButton>
+            </MudPaper>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter] public int CategoryId { get; set; }
+    private readonly Post newPost = new();
+    private MudForm form;
+    private string[] errors = { };
+    private bool isValid;
+
+
+    private async Task ResetFormAndValidationAsync()
+    {
+        await form.ResetAsync();
+        form.ResetValidation();
+    }
+
+    private void AddDateAndCategory()
+    {
+        newPost.CategoryId = CategoryId;
+        newPost.DateCreated = DateTime.Now;
+        newPost.DateEdited = DateTime.Now;
+    }
+
+    private async Task ValidateAndSaveAsync()
+    {
+        AddDateAndCategory();
+        await form.Validate();
+        isValid = form.IsValid;
+
+        if (!isValid) return;
+        try
+        {
+            isValid = await Service.CreatePostAsync(newPost);
+            if (isValid)
+            {
+                Nav.NavigateTo($"/category/{CategoryId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            errors = [ex.Message];
+        }
+    }
+
+}

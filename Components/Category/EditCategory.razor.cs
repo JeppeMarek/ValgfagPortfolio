@@ -1,19 +1,34 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Build.Framework;
 using MudBlazor;
-using ValgfagPortfolio.Model;
 
-namespace ValgfagPortfolio.Components;
+namespace ValgfagPortfolio.Components.Category;
 
-public partial class NewCategory : ComponentBase
+public partial class EditCategory : ComponentBase
 {
-    private readonly Category newCategory = new();
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
     private string[] errors = { };
     private MudForm form;
     private bool isValid;
+    [Parameter] public int Id { get; set; }
+    [Required] public Model.Category selectedCategory { get; set; } = new();
     private string? selectedIcon { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
+            if (selectedCategory is null) throw new NullReferenceException("Category not found " + Id);
+            selectedIcon = selectedCategory.LogoImgPath;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 
     private async Task ResetFormAndValidationAsync()
     {
@@ -28,7 +43,7 @@ public partial class NewCategory : ComponentBase
 
     private void SetIcon()
     {
-        newCategory.LogoImgPath = selectedIcon switch
+        selectedCategory.LogoImgPath = selectedIcon switch
         {
             "Log" => "/Images/icons/log.png",
             "Project" => "/Images/icons/project.png",
@@ -41,25 +56,32 @@ public partial class NewCategory : ComponentBase
     {
         var isUploaded = false;
         if (coverImage is not null)
-            newCategory.CoverImgPath =
+            selectedCategory.CoverImgPath =
                 await imageService.UploadImageAsync(coverImage,
                     "categories");
         else
-            newCategory.CoverImgPath = "Images/cover/default-cover.jpeg";
+            selectedCategory.CoverImgPath = "Images/cover/default-cover.jpeg";
         isUploaded = true;
         return isUploaded;
     }
 
     private async Task OnCoverImageSelected(InputFileChangeEventArgs e)
     {
-        coverImage = e.File;
+        try
+        {
+            coverImage = e.File;
 
-        using var stream = coverImage.OpenReadStream(5_000_000);
-        var buffer = new byte[coverImage.Size];
-        await stream.ReadAsync(buffer);
+            using var stream = coverImage.OpenReadStream(5_000_000);
+            var buffer = new byte[coverImage.Size];
+            await stream.ReadAsync(buffer);
 
-        coverPreviewURL =
-            $"data:{coverImage.ContentType};base64,{Convert.ToBase64String(buffer)}";
+            coverPreviewURL =
+                $"data:{coverImage.ContentType};base64,{Convert.ToBase64String(buffer)}";
+        }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 
     private async Task ValidateAndSaveAsync()
@@ -72,9 +94,9 @@ public partial class NewCategory : ComponentBase
         {
             var isCoverUploaded = await SetCoverImageAsync();
             if (isCoverUploaded) SetIcon();
-            isValid = await categoryService.CreateCategoryAsync(newCategory);
+            isValid = await categoryService.UpdateCategoryAsync(selectedCategory);
             if (isValid)
-                navigationManager.NavigateTo("/", true);
+                navigationManager.NavigateTo($"/category/{Id}", true);
         }
         catch (Exception ex)
         {

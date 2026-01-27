@@ -18,20 +18,20 @@ public class CategoryRepository : IRepository<Category>
     {
         if (entity != null)
         {
-            context.Categories.Add(entity);
+            context._Categories.Add(entity);
             await context.SaveChangesAsync();
         }
     }
 
     public async Task<List<Category>> GetAllEntitiesAsync()
     {
-        return await context.Categories.ToListAsync();
+        return await context._Categories.ToListAsync();
     }
 
 
     public async Task<Category> GetEntityByIdAsync(int id)
     {
-        var category = await context.Categories.Include(c => c.Posts)
+        var category = await context._Categories.Include(c => c.Posts)
             .FirstOrDefaultAsync(c => c.Id == id);
         return category;
     }
@@ -46,7 +46,7 @@ public class CategoryRepository : IRepository<Category>
 
     public async Task DeleteEntityAsync(Category entity)
     {
-        context.Categories.Remove(entity);
+        context._Categories.Remove(entity);
         await context.SaveChangesAsync();
     }
 }

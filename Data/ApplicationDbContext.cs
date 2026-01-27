@@ -8,8 +8,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     : IdentityDbContext<ApplicationUser>(options)
 {
     // Set what tables needed for domain classes
-    public DbSet<AppUser> AppUsers { get; set; }   
-    public DbSet<Category> Categories { get; set; } 
+    public DbSet<AppUser> AppUsers { get; set; }
+    public DbSet<Category> _Categories { get; set; }
     public DbSet<Post> Posts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)

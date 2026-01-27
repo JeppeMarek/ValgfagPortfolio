@@ -1,0 +1,42 @@
+@using Radzen.Blazor
+@using AlignItems = Radzen.AlignItems
+@using Orientation = Radzen.Orientation
+<RadzenStack Gap="3rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+    <RadzenLabel Component="html">Allow HTML</RadzenLabel>
+    <RadzenSwitch @bind-Value="allowHtml"/>
+</RadzenStack>
+
+<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem">
+    <RadzenColumn SizeMD="6">
+        @* ReSharper disable Html.AttributesQuotes *@
+        <RadzenTextArea Value="@MarkdownContent"
+                        ValueChanged="OnValueChanged"
+                        @oninput=@OnInput
+                        Style="width: 100%; height: 400px"/>
+        @* ReSharper restore Html.AttributesQuotes *@
+
+    </RadzenColumn>
+
+    <RadzenColumn SizeMD="6">
+        <RadzenMarkdown Text="@MarkdownContent" AllowHtml="allowHtml"/>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    private bool allowHtml = true;
+
+    private async Task OnValueChanged(string? value)
+    {
+        MarkdownContent = value;
+        await MarkdownContentChanged.InvokeAsync(value);
+    }
+
+    void OnInput(ChangeEventArgs args)
+    {
+        MarkdownContent = args.Value.ToString();
+    }
+
+    [Parameter] public string? MarkdownContent { get; set; }
+
+    [Parameter] public EventCallback<string?> MarkdownContentChanged { get; set; }
+}
