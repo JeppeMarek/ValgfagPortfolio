@@ -21,28 +21,31 @@ public class ImageService : IImageService
         this.env = env;
     }
 
-    public async Task<string> UploadImageAsync(IBrowserFile file, string folder,
+    public async Task<string> UploadImageAsync(
+        IBrowserFile file,
+        string folder,
         CancellationToken cancellationToken = default)
     {
-        // Validate type and size
         if (!AllowedTypes.Contains(file.ContentType))
-            throw new InvalidOperationException
-                ("Ugyldigt fil format");
+            throw new InvalidOperationException("Ugyldigt filformat");
+
         if (file.Size > Maxfilesize)
-            throw new InvalidOperationException("Filen er for stor. Max 5 mb");
-        // Setup folder for uploads
+            throw new InvalidOperationException("Filen er for stor. Max 5 MB");
+
+        // env.WebRootPath = c:\home\site\wwwroot\wwwroot (på Azure)
         var uploadsRoot = Path.Combine(env.WebRootPath, "uploads", folder);
         Directory.CreateDirectory(uploadsRoot);
-        // Generate an id for file and set the filepath
+
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
         var filePath = Path.Combine(uploadsRoot, fileName);
-        // Copy file to folder
+
         await using var stream = File.Create(filePath);
         await file.OpenReadStream(Maxfilesize).CopyToAsync(stream, cancellationToken);
-        // Return the relative filepath
-        var relPath = $"uploads/{folder}/{fileName}";
-        return relPath;
+
+        // VIGTIGT: leading slash
+        return $"/uploads/{folder}/{fileName}";
     }
+
 
     public async Task DeleteImageAsync(string filePath)
     {
