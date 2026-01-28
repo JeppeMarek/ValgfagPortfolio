@@ -6,18 +6,18 @@
     <RadzenSwitch @bind-Value="allowHtml"/>
 </RadzenStack>
 
-<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem">
-    <RadzenColumn SizeMD="6">
+<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem" Style="width: 100%;">
+    <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
         @* ReSharper disable Html.AttributesQuotes *@
         <RadzenTextArea @class="overflow-scroll" Value="@MarkdownContent"
                         ValueChanged="OnValueChanged"
                         @oninput=@OnInput
-                        Style="width: 100%; height: 400px"/>
+                        Style="width: 100%; height: 400px;"/>
         @* ReSharper restore Html.AttributesQuotes *@
 
     </RadzenColumn>
 
-    <RadzenColumn SizeMD="6">
+    <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
         <RadzenMarkdown Text="@MarkdownContent" AllowHtml="allowHtml"/>
     </RadzenColumn>
 </RadzenRow>
