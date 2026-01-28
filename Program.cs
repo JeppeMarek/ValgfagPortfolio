@@ -18,6 +18,13 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 
+// User Secrets
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+
+
 
 // Dependecy Injection Repositories
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
