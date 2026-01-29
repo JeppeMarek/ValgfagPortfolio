@@ -1,17 +1,14 @@
+@using MudBlazor.Utilities
 @inherits LayoutComponentBase
-@inject NavigationManager nav
-@inject DarkModeService DarkModeService
 @* Required *@
 <MudPopoverProvider/>
 
 @* Needed for dialogs *@
 <MudDialogProvider/>
 
-@* <RadzenComponents @rendermode="InteractiveAuto"/> *@
-
 @* Needed for snackbars *@
 <MudSnackbarProvider/>
-<MudThemeProvider Theme="Flatlytheme" @bind-IsDarkMode="@DarkModeService.IsDarkMode"/>
+<MudThemeProvider Theme="Flatlytheme"/>
 @*Actual layout*@
 <div class="layout-container">
     <MudLayout>
@@ -19,8 +16,6 @@
             <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/" Class="navbar-brand">Portfolio</MudButton>
             <MudSpacer/>
             <MudButtonGroup>
-                <MudIconButton Icon="@(DarkModeService.IsDarkMode ? Icons.Material.Filled.Light 
-    : Icons.Material.Filled.DarkMode)" OnClick="@OnToggleModeClickAsync"></MudIconButton>
                 <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
                                Href="https://github.com/JeppeMarek"></MudIconButton>
                 <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
@@ -35,19 +30,14 @@
         </MudMainContent>
     </MudLayout>
 
-    <footer class="footer">
-        <MudText Typo="Typo.body2">
+    <footer class="footer" style="background: #41464b">
+        <MudText Color="Color.Info" Typo="Typo.body2">
             © @DateTime.Now.Year · Webpage by <a href="https://github.com/JeppeMarek">Jeppe Marek</a>
         </MudText>
     </footer>
 </div>
 
 @code {
-    private async Task OnToggleModeClickAsync()
-    {
-        DarkModeService.ToggleDarkMode();
-    }
-
     /* 
 !
 * Bootswatch v5.3.3 (https://bootswatch.com)
@@ -318,6 +308,5 @@
             Tooltip = 1600
         }
     };
-
-
+    
 }

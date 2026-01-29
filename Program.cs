@@ -1,6 +1,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 using Radzen;
 using ValgfagPortfolio.Components;
@@ -28,7 +29,6 @@ builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<DarkModeService>();
 
 
 // MudBlazor
