@@ -1,4 +1,3 @@
-@using Radzen.Blazor
 @inherits LayoutComponentBase
 @inject NavigationManager nav
 @* Required *@
@@ -8,7 +7,7 @@
 @* Needed for dialogs *@
 <MudDialogProvider/>
 
-<RadzenComponents @rendermode="InteractiveServer"/>
+@* <RadzenComponents @rendermode="InteractiveAuto"/> *@
 
 @* Needed for snackbars *@
 <MudSnackbarProvider/>

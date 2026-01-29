@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MudBlazor;
 using MudBlazor.Services;
 using Radzen;
 using ValgfagPortfolio.Components;
@@ -10,7 +9,6 @@ using ValgfagPortfolio.Model;
 using ValgfagPortfolio.Persistence.Interfaces;
 using ValgfagPortfolio.Persistence.Repositories;
 using ValgfagPortfolio.Services;
-using DialogService = MudBlazor.DialogService;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -19,11 +17,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 
 // User Secrets
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddUserSecrets<Program>();
-}
-
+if (builder.Environment.IsDevelopment()) builder.Configuration.AddUserSecrets<Program>();
 
 
 // Dependecy Injection Repositories

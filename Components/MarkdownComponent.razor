@@ -1,12 +1,15 @@
 @using Radzen.Blazor
 @using AlignItems = Radzen.AlignItems
 @using Orientation = Radzen.Orientation
-<RadzenStack Gap="3rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+@rendermode InteractiveAuto
+<RadzenComponents></RadzenComponents>
+
+<RadzenStack Gap="4rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
     <RadzenLabel Component="html">Allow HTML</RadzenLabel>
     <RadzenSwitch @bind-Value="allowHtml"/>
 </RadzenStack>
 
-<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem" Style="width: 100%;">
+<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem" Style="width: 100%; height: 100%">
     <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
         @* ReSharper disable Html.AttributesQuotes *@
         <RadzenTextArea @class="overflow-scroll" Value="@MarkdownContent"

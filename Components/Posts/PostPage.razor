@@ -8,10 +8,12 @@
 <MudPaper Elevation="3" Class="bg-body-secondary mt-5">
     <MudCard>
         <MudCardContent>
-            <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
-            <MudGrid Spacing="8" Justify="Justify.SpaceEvenly">
-                <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag oprettet: @createdDate</MudText>
-                <MudText Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret: @lastEditedDate</MudText>
+            <MudGrid Spacing="1" Justify="Justify.SpaceEvenly">
+                <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
+                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1">Opslag oprettet: 
+                    @createdDate</MudText>
+                <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret: 
+                    @lastEditedDate</MudText>
             </MudGrid>
             <MudPaper Class="border-secondary-subtle border-4 mt-5">
                 <RadzenMarkdown AllowHtml="@allowHTML">
