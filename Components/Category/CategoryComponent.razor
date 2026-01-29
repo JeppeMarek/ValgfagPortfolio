@@ -62,7 +62,8 @@
 
     private async Task DeleteCategoryAsync()
     {
-        await BlobService.DeleteBlobAsync(SelectedCategory.CoverImgPath);
+        string blobName = Path.GetFileName(SelectedCategory.CoverImgPath);
+        await BlobService.DeleteBlobAsync(blobName);
         await CategoryService.DeleteCategoryAsync(SelectedCategory);
         Nav.Refresh(true);
     }

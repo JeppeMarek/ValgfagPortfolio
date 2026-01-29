@@ -5,7 +5,7 @@ using ValgfagPortfolio.Model;
 
 namespace ValgfagPortfolio.Services;
 
-public class BlobStorageServiceService : IBlobStorageService
+public class BlobStorageService : IBlobStorageService
 {
     private const string ContainerName = "images";
     private const long MaxFileSize = 5 * 1024 * 1024;
@@ -19,7 +19,7 @@ public class BlobStorageServiceService : IBlobStorageService
 
     private readonly BlobServiceClient _client;
 
-    public BlobStorageServiceService(BlobServiceClient client)
+    public BlobStorageService(BlobServiceClient client)
     {
         _client = client;
     }
@@ -97,6 +97,6 @@ public class BlobStorageServiceService : IBlobStorageService
     {
         var containerClient = _client.GetBlobContainerClient(ContainerName);
         var blobClient = containerClient.GetBlobClient(name);
-        await blobClient.DeleteAsync();
+        await blobClient.DeleteIfExistsAsync();
     }
 }
