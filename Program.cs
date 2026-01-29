@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Radzen;
-
 using ValgfagPortfolio.Components;
 using ValgfagPortfolio.Components.Account;
 using ValgfagPortfolio.Data;
@@ -47,13 +46,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 // Connectionstring
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException(
-                           "Connection string 'DefaultConnection' not found.");
+                        throw new InvalidOperationException(
+                            "Connection string 'DefaultConnection' not found.");
 
 // Blob storage connection
 var blobStorageConnection = builder.Configuration.GetConnectionString("BlobStorageConnection");
 
-builder.Services.AddSingleton(sp => new BlobServiceClient);
+builder.Services.AddSingleton(sp => new BlobServiceClient(blobStorageConnection));
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(defaultConnection));
