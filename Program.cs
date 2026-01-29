@@ -1,7 +1,9 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Radzen;
+
 using ValgfagPortfolio.Components;
 using ValgfagPortfolio.Components.Account;
 using ValgfagPortfolio.Data;
@@ -44,12 +46,17 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 builder.Services.AddAuthorization();
 // Connectionstring
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException(
                            "Connection string 'DefaultConnection' not found.");
+
+// Blob storage connection
+var blobStorageConnection = builder.Configuration.GetConnectionString("BlobStorageConnection");
+
+builder.Services.AddSingleton(sp => new BlobServiceClient);
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(defaultConnection));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Application user from Identity and DbContext
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -62,7 +69,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
