@@ -1,19 +1,25 @@
 @using Microsoft.IdentityModel.Tokens
 @rendermode InteractiveServer
-@inject ICategoryService service
-@inject NavigationManager nav
+@inject ICategoryService CategoryService
+@inject IBlobStorageService BlobService
+@inject NavigationManager Nav
 <MudPaper>
     <MudCard>
         <MudImage Src="@SelectedCategory.CoverImgPath" Class="rounded-lg" ObjectFit="ObjectFit.Cover" Height="200"
-                  ObjectPosition="ObjectPosition.Center"
-        ></MudImage>
+                  Width="500"
+                  ObjectPosition="ObjectPosition.Center">
+
+        </MudImage>
+
         <MudCardContent>
-            <MudText Typo="Typo.h3">@SelectedCategory.Title
-                <MudImage Src="@SelectedCategory.LogoImgPath" Height="36" Width="36"></MudImage>
-            </MudText>
+            <MudContainer Class="card-header">
+                <MudText Style="@HeaderStyle" Typo="Typo.h3">@SelectedCategory.Title
+                    <MudImage Src="@SelectedCategory.LogoImgPath" Height="24" Width="24"></MudImage>
+                </MudText>
+            </MudContainer>
             @if (!SelectedCategory.Description.IsNullOrEmpty())
             {
-                @if (SelectedCategory.Description.Length >= 200)
+                @if (SelectedCategory.Description.Length >= 100)
                 {
                     <MudButton OnClick="@OnExpandCollapseClick">@(expanded ? "Fold beskrivelse" : "Udvid beskrivelse")
                     </MudButton>
@@ -56,14 +62,37 @@
 
     private async Task DeleteCategoryAsync()
     {
-        await service.DeleteCategoryAsync(SelectedCategory);
-        nav.Refresh(true);
+        await BlobService.DeleteBlobAsync(SelectedCategory.CoverImgPath);
+        await CategoryService.DeleteCategoryAsync(SelectedCategory);
+        Nav.Refresh(true);
     }
 
-    private async Task EditCategoryAsync()
+    private string HeaderStyle
     {
-        nav.NavigateTo($"/category/edit/{SelectedCategory.Id}");
-        nav.Refresh();
+        get
+        {
+            var typeAndColor = new Dictionary<string, string>
+            {
+                { "diverse.png", "#3D6B0C" },
+                { "log.png", "#138485" },
+                { "project.png", "#852F13" }
+            };
+
+            var color = typeAndColor.TryGetValue(
+                Path.GetFileName(SelectedCategory?.LogoImgPath ?? string.Empty),
+                out var c)
+                ? c
+                : "#000000";
+
+            return $"color:{color}";
+        }
+    }
+
+
+    private void EditCategoryAsync()
+    {
+        Nav.NavigateTo($"/category/edit/{SelectedCategory.Id}");
+        Nav.Refresh();
     }
 
     private void OnExpandCollapseClick()
