@@ -18,7 +18,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 
 // User Secrets
-if (builder.Environment.IsDevelopment()) builder.Configuration.AddUserSecrets<Program>();
+builder.Configuration.AddUserSecrets<Program>();
 
 
 // Dependecy Injection Repositories
@@ -50,9 +50,12 @@ var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnec
                             "Connection string 'DefaultConnection' not found.");
 
 // Blob storage connection
-var blobStorageConnection = builder.Configuration.GetConnectionString("BlobStorageConnection");
+var blobStorageConnection = builder.Configuration.GetConnectionString("BlobStorage") ??
+                            throw new InvalidOperationException(
+                                "Connection string 'BlobStorage' not found.");
 
 builder.Services.AddSingleton(sp => new BlobServiceClient(blobStorageConnection));
+builder.Services.AddSingleton<IBlobStorageService, BlobStorageServiceService>();
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(defaultConnection));

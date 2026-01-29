@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
+using ValgfagPortfolio.Services;
 
 namespace ValgfagPortfolio.Components.Category;
 
 public partial class NewCategory : ComponentBase
 {
+    [Inject] private IBlobStorageService BlobStorageService { get; set; }
+    [Inject] private ICategoryService CategoryService { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
     private readonly Model.Category newCategory = new();
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
@@ -40,12 +45,23 @@ public partial class NewCategory : ComponentBase
     {
         var isUploaded = false;
         if (coverImage is not null)
-            newCategory.CoverImgPath =
-                await imageService.UploadImageAsync(coverImage,
-                    "categories");
+        {
+            try
+            {
+                newCategory.CoverImgPath =
+                    await BlobStorageService.UploadImageAsync(coverImage, "categories");
+                isUploaded = true;
+            }
+            catch (Exception ex)
+            {
+                errors = [ex.Message];
+            }
+        }
         else
+        {
             newCategory.CoverImgPath = "Images/cover/default-cover.jpeg";
-        isUploaded = true;
+            isUploaded = true;
+        }
         return isUploaded;
     }
 
@@ -71,9 +87,9 @@ public partial class NewCategory : ComponentBase
         {
             var isCoverUploaded = await SetCoverImageAsync();
             if (isCoverUploaded) SetIcon();
-            isValid = await categoryService.CreateCategoryAsync(newCategory);
+            isValid = await CategoryService.CreateCategoryAsync(newCategory);
             if (isValid)
-                navigationManager.NavigateTo("/", true);
+                NavigationManager.NavigateTo("/", true);
         }
         catch (Exception ex)
         {

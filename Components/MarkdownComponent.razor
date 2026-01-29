@@ -2,17 +2,12 @@
 @using AlignItems = Radzen.AlignItems
 @using Orientation = Radzen.Orientation
 @rendermode InteractiveAuto
-<RadzenComponents></RadzenComponents>
+<RadzenComponents ></RadzenComponents>
 
-<RadzenStack Gap="4rem" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-    <RadzenLabel Component="html">Allow HTML</RadzenLabel>
-    <RadzenSwitch @bind-Value="allowHtml"/>
-</RadzenStack>
-
-<RadzenRow class="rz-pt-6" Gap="3rem" RowGap="1rem" Style="width: 100%; height: 100%">
+<RadzenColumn class="rz-pt-6" Gap="3rem" RowGap="2rem" Style="width: 100%; height: 100%">
     <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
         @* ReSharper disable Html.AttributesQuotes *@
-        <RadzenTextArea @class="overflow-scroll" Value="@MarkdownContent"
+        <RadzenTextArea @class="overflow-scroll"  Value="@MarkdownContent"
                         ValueChanged="OnValueChanged"
                         @oninput=@OnInput
                         Style="width: 100%; height: 400px;"/>
@@ -21,13 +16,11 @@
     </RadzenColumn>
 
     <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
-        <RadzenMarkdown Text="@MarkdownContent" AllowHtml="allowHtml"/>
+        <RadzenMarkdown Text="@MarkdownContent"/>
     </RadzenColumn>
-</RadzenRow>
+</RadzenColumn>
 
 @code {
-    private bool allowHtml = true;
-
     private async Task OnValueChanged(string? value)
     {
         MarkdownContent = value;
