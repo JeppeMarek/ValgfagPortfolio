@@ -28,6 +28,7 @@ builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<DarkModeService>();
 
 
 // MudBlazor

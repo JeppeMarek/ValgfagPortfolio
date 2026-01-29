@@ -3,7 +3,7 @@
 @inject IPostService Service
 @inject NavigationManager Nav
 
-
+<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper class="pa-4">
@@ -33,10 +33,18 @@
     private MudForm form;
     private string[] errors = { };
     private bool isValid;
+    private List<BreadcrumbItem> breadcrumbItems = new();
 
     protected override async Task OnInitializedAsync()
     {
         selectedPost = await Service.GetPostByIdAsync(Id);
+        breadcrumbItems = new List<BreadcrumbItem>
+        {
+            new("Home", "/"),
+            new("Kategori", $"category/{selectedPost.CategoryId}"),
+            new(selectedPost.Title, $"posts/{selectedPost.Id}/"),
+            new(selectedPost.Title, null, true)
+        };
     }
 
     private async Task ResetFormAndValidationAsync()
