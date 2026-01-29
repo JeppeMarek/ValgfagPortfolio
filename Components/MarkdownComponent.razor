@@ -1,13 +1,11 @@
 @using Radzen.Blazor
-@using AlignItems = Radzen.AlignItems
-@using Orientation = Radzen.Orientation
 @rendermode InteractiveAuto
-<RadzenComponents ></RadzenComponents>
+<RadzenComponents></RadzenComponents>
 
 <RadzenColumn class="rz-pt-6" Gap="3rem" RowGap="2rem" Style="width: 100%; height: 100%">
     <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
         @* ReSharper disable Html.AttributesQuotes *@
-        <RadzenTextArea @class="overflow-scroll"  Value="@MarkdownContent"
+        <RadzenTextArea @class="overflow-scroll" Value="@MarkdownContent"
                         ValueChanged="OnValueChanged"
                         @oninput=@OnInput
                         Style="width: 100%; height: 400px;"/>
@@ -16,11 +14,12 @@
     </RadzenColumn>
 
     <RadzenColumn Size="12" SizeMD="6" Style="min-width: 0;">
-        <RadzenMarkdown Text="@MarkdownContent"/>
+        <RadzenMarkdown Text="@MarkdownContent" AllowHtml="false"/>
     </RadzenColumn>
 </RadzenColumn>
 
 @code {
+
     private async Task OnValueChanged(string? value)
     {
         MarkdownContent = value;
