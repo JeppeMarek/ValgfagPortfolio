@@ -59,8 +59,8 @@
     private void AddDateAndCategory()
     {
         newPost.CategoryId = CategoryId;
-        newPost.DateCreated = DateTime.Today;
-        newPost.DateEdited = DateTime.Today;
+        newPost.DateCreated = DateTime.Now;
+        newPost.DateEdited = DateTime.Now;
     }
 
     private async Task ValidateAndSaveAsync()

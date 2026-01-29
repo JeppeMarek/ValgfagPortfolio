@@ -59,8 +59,8 @@
                 new("Kategori", $"category/{categoryId}"),
                 new($"{selectedPost.Title}", null, true)
             };
-            createdDate = selectedPost.DateCreated.ToString("d");
-            lastEditedDate = selectedPost.DateEdited.ToString("d");
+            createdDate = selectedPost.DateCreated.ToString("dd/MM | HH:mm");
+            lastEditedDate = selectedPost.DateEdited.ToString("dd/MM | HH:mm");
         }
         catch (Exception e)
         {

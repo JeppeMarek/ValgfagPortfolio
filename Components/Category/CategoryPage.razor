@@ -28,18 +28,19 @@
         <tbody>
         @if (!posts.IsNullOrEmpty())
         {
-            @foreach (var post in posts)
+            @foreach (var post in posts.OrderByDescending(p => p.DateEdited))
             {
+                createdDate = post.DateCreated.ToString("dd/MM | HH:mm");
+                lastEditedDate = post.DateEdited.ToString("dd/MM | HH:mm");
                 <tr @onclick="@(() => OnRowClick(post.Id))" style="cursor: pointer">
                     <td>@post.Title</td>
                     <td>@post.Content</td>
-                    <td>@post.DateCreated</td>
-                    <td>@post.DateEdited</td>
+                    <td>@createdDate</td>
+                    <td>@lastEditedDate</td>
                     <td>
                         <MudButton OnClick="@(() => OnRowClick(post.Id))"
                                    StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
                     </td>
-
                 </tr>
             }
         }
@@ -59,6 +60,8 @@ else
     [Parameter] public int Id { get; set; }
     [CascadingParameter] public string CategoryTitle { get; set; }
     private int postId;
+    private string createdDate;
+    private string lastEditedDate;
     private Category selectedCategory;
     private List<Post>? posts;
     private List<BreadcrumbItem> breadcrumbItems = new();
