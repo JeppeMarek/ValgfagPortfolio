@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <h3>Category</h3>
 <AuthorizeView>
     <MudButton OnClick="@OnNewPostClicked" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
@@ -29,14 +30,13 @@
         {
             @foreach (var post in posts)
             {
-                postId = post.Id;
-                <tr @onclick="OnRowClick" style="cursor: pointer">
+                <tr @onclick="@(() => OnRowClick(post.Id))" style="cursor: pointer">
                     <td>@post.Title</td>
                     <td>@post.Content</td>
                     <td>@post.DateCreated</td>
                     <td>@post.DateEdited</td>
                     <td>
-                        <MudButton OnClick="OnRowClick"
+                        <MudButton OnClick="@(() => OnRowClick(post.Id))"
                                    StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
                     </td>
 
@@ -61,10 +61,11 @@ else
     private int postId;
     private Category selectedCategory;
     private List<Post>? posts;
+    private List<BreadcrumbItem> breadcrumbItems = new();
 
-    private void OnRowClick()
+    private void OnRowClick(int selectedId)
     {
-        navigationManager.NavigateTo($"/posts/{postId}");
+        navigationManager.NavigateTo($"/posts/{selectedId}");
     }
 
     protected override async Task OnInitializedAsync()
@@ -72,6 +73,11 @@ else
         try
         {
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
+            breadcrumbItems = new List<BreadcrumbItem>
+            {
+                new("Home", "/"),
+                new(selectedCategory.Title, null, true)
+            };
             CategoryTitle = selectedCategory.Title;
             posts = selectedCategory?.Posts ?? new List<Post>();
         }

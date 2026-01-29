@@ -1,8 +1,9 @@
 @page "/category/{CategoryId:int}/posts/new"
-@using System.Runtime.InteropServices.JavaScript
 @rendermode InteractiveServer
 @inject IPostService Service
 @inject NavigationManager Nav
+
+<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 
 
 <MudGrid>
@@ -30,11 +31,24 @@
 
 @code {
     [Parameter] public int CategoryId { get; set; }
+    [Inject] public ICategoryService categoryService { get; set; }
     private readonly Post newPost = new();
     private MudForm form;
     private string[] errors = { };
     private bool isValid;
+    private List<BreadcrumbItem> breadcrumbItems = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        var category = await categoryService.GetCategoryByIdAsync(CategoryId);
+        var categoryTitle = category.Title;
+        breadcrumbItems = new List<BreadcrumbItem>
+        {
+            new("Home", "/"),
+            new($"{categoryTitle}'s opslag", $"/category/{CategoryId}"),
+            new("Nyt opslag", null, true)
+        };
+    }
 
     private async Task ResetFormAndValidationAsync()
     {

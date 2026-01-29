@@ -7,6 +7,7 @@ namespace ValgfagPortfolio.Components.Category;
 
 public partial class EditCategory : ComponentBase
 {
+    private List<BreadcrumbItem> breadcrumbItems = new();
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
     private string[] errors = { };
@@ -22,6 +23,12 @@ public partial class EditCategory : ComponentBase
         {
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
             if (selectedCategory is null) throw new NullReferenceException("Category not found " + Id);
+            breadcrumbItems = new List<BreadcrumbItem>
+            {
+                new("Home", "/"),
+                new(selectedCategory.Title, $"/category/{selectedCategory.Id}"),
+                new("Rediger kategori", null, true)
+            };
             selectedIcon = selectedCategory.LogoImgPath;
         }
         catch (Exception e)

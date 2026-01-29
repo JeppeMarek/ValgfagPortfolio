@@ -5,14 +5,16 @@
 @inject IPostService Service
 @inject NavigationManager nav
 
+<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
+
 <MudPaper Elevation="3" Class="bg-body-secondary mt-5">
     <MudCard>
         <MudCardContent>
             <MudGrid Spacing="1" Justify="Justify.SpaceEvenly">
                 <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
-                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1">Opslag oprettet: 
+                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1">Opslag oprettet:
                     @createdDate</MudText>
-                <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret: 
+                <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret:
                     @lastEditedDate</MudText>
             </MudGrid>
             <MudPaper Class="border-secondary-subtle border-4 mt-5">
@@ -43,6 +45,7 @@
     private string? lastEditedDate;
     private bool? isConfirmed;
     private readonly bool allowHTML = true;
+    private List<BreadcrumbItem> breadcrumbItems = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,6 +53,12 @@
         {
             selectedPost = await Service.GetPostByIdAsync(Id);
             categoryId = selectedPost.CategoryId;
+            breadcrumbItems = new List<BreadcrumbItem>
+            {
+                new("Home", "/"),
+                new("Kategori", $"category/{categoryId}"),
+                new($"{selectedPost.Title}", null, true)
+            };
             createdDate = selectedPost.DateCreated.ToString("d");
             lastEditedDate = selectedPost.DateEdited.ToString("d");
         }

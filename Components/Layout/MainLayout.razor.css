@@ -4,6 +4,10 @@
     flex-direction: column;
 }
 
+.page_background {
+    background-color: darkslategray;
+}
+
 main {
     flex: 1;
 }
