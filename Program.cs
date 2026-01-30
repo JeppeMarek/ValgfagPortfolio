@@ -33,6 +33,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 
 // MudBlazor
 builder.Services.AddMudServices();
+builder.Services.AddMudMarkdownServices();
 
 // Radzen
 builder.Services.AddRadzenComponents();
