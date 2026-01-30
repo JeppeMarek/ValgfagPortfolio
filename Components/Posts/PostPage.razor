@@ -1,6 +1,5 @@
 @page "/posts/{Id:int}"
 @using Microsoft.Build.Framework
-@using Radzen.Blazor
 @rendermode InteractiveServer
 @inject IPostService Service
 @inject NavigationManager nav
@@ -18,9 +17,7 @@
                     @lastEditedDate</MudText>
             </MudGrid>
             <MudPaper Class="border-secondary-subtle border-4 mt-5">
-                <RadzenMarkdown AllowHtml="@allowHTML">
-                    @selectedPost.Content
-                </RadzenMarkdown>
+                <MudMarkdown Value="@selectedPost.Content"></MudMarkdown>
             </MudPaper>
         </MudCardContent>
         <MudCardActions>

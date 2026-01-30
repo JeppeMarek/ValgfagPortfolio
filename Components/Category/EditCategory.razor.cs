@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Build.Framework;
-using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 
 namespace ValgfagPortfolio.Components.Category;
@@ -17,6 +16,7 @@ public partial class EditCategory : ComponentBase
     [Parameter] public int Id { get; set; }
     [Required] public Model.Category selectedCategory { get; set; } = new();
     private string? selectedIcon { get; set; }
+    private bool isIconModified { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,6 +32,7 @@ public partial class EditCategory : ComponentBase
             };
             selectedIcon = selectedCategory.LogoImgPath;
             coverPreviewURL = selectedCategory.CoverImgPath;
+            isIconModified = false;
         }
         catch (Exception e)
         {
@@ -48,23 +49,26 @@ public partial class EditCategory : ComponentBase
     private async Task ResetRadioIconAsync()
     {
         selectedIcon = null;
+        isIconModified = true;
+        selectedCategory.LogoImgPath = null;
     }
 
-    private void SetIcon()
+    private async Task OnIconSelectedAsync()
     {
+        isIconModified = true;
         selectedCategory.LogoImgPath = selectedIcon switch
         {
             "Log" => "/Images/icons/log.png",
             "Project" => "/Images/icons/project.png",
             "Diverse" => "/Images/icons/diverse.png",
-            _ => "/Images/icons/default-icon.png"
+            _ => null
         };
     }
 
     private async Task<bool> SetCoverImageAsync()
     {
-        bool isUploaded = false;
-        
+        var isUploaded = false;
+
         if (coverImage is not null)
         {
             selectedCategory.CoverImgPath =
@@ -101,11 +105,9 @@ public partial class EditCategory : ComponentBase
         await form.Validate();
         if (!form.IsValid)
             return;
-
         try
         {
-            var isCoverUploaded = await SetCoverImageAsync();
-            if (isCoverUploaded) SetIcon();
+            await SetCoverImageAsync();
             isValid = await categoryService.UpdateCategoryAsync(selectedCategory);
             if (isValid)
                 navigationManager.NavigateTo($"/category/{Id}", true);

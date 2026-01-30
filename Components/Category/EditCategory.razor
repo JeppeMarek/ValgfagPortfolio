@@ -37,14 +37,12 @@
                               Class="mt-2"
                               Alt="Cover preview"/>
                 }
-
-                <MudRadioGroup @bind-Value="selectedIcon">
+                <MudRadioGroup @bind-Value="selectedIcon" @bind-Value:after="OnIconSelectedAsync">
                     <MudRadio Value="@("Log")" Color="Color.Primary">Log</MudRadio>
                     <MudRadio Value="@("Project")" Color="Color.Secondary">Project</MudRadio>
                     <MudRadio Value="@("Diverse")">Diverse</MudRadio>
                     <MudButton OnClick="@ResetRadioIconAsync">Fjern valg</MudButton>
                 </MudRadioGroup>
-
             </MudForm>
 
         </MudPaper>

@@ -1,6 +1,4 @@
-﻿@using Radzen.Blazor
-@using Colors = Radzen.Colors
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,7 +18,6 @@
     <!--MudBlazor.Markdown-->
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet"/>
     <link href="_content/MudBlazor.Markdown/MudBlazor.Markdown.min.css" rel="stylesheet"/>
-    <RadzenTheme Theme="material"/>
 
 </head>
 
@@ -29,7 +26,6 @@
 <script src="@Assets["_framework/blazor.web.js"]"></script>
 <script src="@Assets["_content/MudBlazor/MudBlazor.min.js"]"></script>
 <script src="@Assets["Components/Account/Shared/PasskeySubmit.razor.js"]" type="module"></script>
-<script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Colors).Assembly.GetName().Version)"></script>
 <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 <script src="_content/MudBlazor.Markdown/MudBlazor.Markdown.min.js"></script>
 </body>

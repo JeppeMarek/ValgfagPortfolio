@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
-using Radzen;
 using ValgfagPortfolio.Components;
 using ValgfagPortfolio.Components.Account;
 using ValgfagPortfolio.Data;
@@ -34,9 +33,6 @@ builder.Services.AddScoped<IImageService, ImageService>();
 // MudBlazor
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
-
-// Radzen
-builder.Services.AddRadzenComponents();
 
 // Authentication
 builder.Services.AddAuthentication(options =>

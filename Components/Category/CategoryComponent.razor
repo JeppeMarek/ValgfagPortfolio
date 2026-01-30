@@ -4,13 +4,8 @@
 @inject IBlobStorageService BlobService
 @inject NavigationManager Nav
 <MudPaper>
-    <MudCard>
-        <MudImage Src="@SelectedCategory.CoverImgPath" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" Height="200"
-                  Width="500"
-                  ObjectPosition="ObjectPosition.Center">
-
-        </MudImage>
-
+    <MudCard Elevation="5" Class="rounded-4 w-auto">
+        <MudCardMedia Image="@SelectedCategory.CoverImgPath"></MudCardMedia>
         <MudCardContent>
             <MudContainer Class="card-header">
                 <MudText Style="@HeaderStyle" Typo="Typo.h3">@SelectedCategory.Title
@@ -62,7 +57,7 @@
 
     private async Task DeleteCategoryAsync()
     {
-        string blobName = Path.GetFileName(SelectedCategory.CoverImgPath);
+        var blobName = Path.GetFileName(SelectedCategory.CoverImgPath);
         await BlobService.DeleteBlobAsync(blobName);
         await CategoryService.DeleteCategoryAsync(SelectedCategory);
         Nav.Refresh(true);
