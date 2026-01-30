@@ -85,7 +85,6 @@ public partial class EditCategory : ComponentBase
         try
         {
             coverImage = e.File;
-
             using var stream = coverImage.OpenReadStream(5_000_000);
             var buffer = new byte[coverImage.Size];
             await stream.ReadAsync(buffer);

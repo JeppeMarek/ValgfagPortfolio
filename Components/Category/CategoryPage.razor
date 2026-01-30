@@ -34,7 +34,7 @@
                 lastEditedDate = post.DateEdited.ToString("dd/MM | HH:mm");
                 <tr @onclick="@(() => OnRowClick(post.Id))" style="cursor: pointer">
                     <td>@post.Title</td>
-                    <td>@post.Content</td>
+                    <td >@(post.Content.Length > 75 ? post.Content.Substring(0,55)+"......" : post.Content)</td>
                     <td>@createdDate</td>
                     <td>@lastEditedDate</td>
                     <td>
