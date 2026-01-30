@@ -32,7 +32,7 @@
 
                 @if (!string.IsNullOrEmpty(coverPreviewURL))
                 {
-                    <MudImage Src="@(string.IsNullOrEmpty(coverPreviewURL) ? "" : selectedCategory.CoverImgPath)"
+                    <MudImage Src="@coverPreviewURL"
                               Width="200"
                               Class="mt-2"
                               Alt="Cover preview"/>

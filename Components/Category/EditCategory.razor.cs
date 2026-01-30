@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Build.Framework;
+using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 
 namespace ValgfagPortfolio.Components.Category;
@@ -30,6 +31,7 @@ public partial class EditCategory : ComponentBase
                 new("Rediger kategori", null, true)
             };
             selectedIcon = selectedCategory.LogoImgPath;
+            coverPreviewURL = selectedCategory.CoverImgPath;
         }
         catch (Exception e)
         {
@@ -61,14 +63,16 @@ public partial class EditCategory : ComponentBase
 
     private async Task<bool> SetCoverImageAsync()
     {
-        var isUploaded = false;
+        bool isUploaded = false;
+        
         if (coverImage is not null)
+        {
             selectedCategory.CoverImgPath =
                 await imageService.UploadImageAsync(coverImage,
                     "categories");
-        else
-            selectedCategory.CoverImgPath = "Images/cover/default-cover.jpeg";
-        isUploaded = true;
+            isUploaded = true;
+        }
+
         return isUploaded;
     }
 
@@ -84,6 +88,7 @@ public partial class EditCategory : ComponentBase
 
             coverPreviewURL =
                 $"data:{coverImage.ContentType};base64,{Convert.ToBase64String(buffer)}";
+            StateHasChanged();
         }
         catch (NullReferenceException ex)
         {

@@ -7,11 +7,11 @@
                   ValueChanged="OnValueChanged"
                   Placeholder="Begynd at skriv opslagets indhold her... Teksten understøtter Markdown"
                   HelperText="Opslagets indhold"
-                  Multiline="true"
                   Lines="15"/>
 
     <div Size="12" SizeMD="6" Style="min-width: 0;">
-        <MudButton OnClick="@UpdatePreview">Opdater forhåndsvisning</MudButton>
+        <MudButton EndIcon="@Icons.Material.Filled.Update" Color="Color.Tertiary" Ripple="true" 
+                   OnClick="@UpdatePreview">Opdater</MudButton>
         <MudMarkdown Value="@MarkdownContent"/>
     </div>
 </MudContainer>
