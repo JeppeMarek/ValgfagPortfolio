@@ -21,7 +21,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
+          dotnet-version: '10.0.100'
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -60,6 +60,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'jeppeportfolie'
-          slot-name: 'Production'
           package: .
+
           
