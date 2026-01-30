@@ -61,7 +61,7 @@ public partial class EditCategory : ComponentBase
             "Log" => "/Images/icons/log.png",
             "Project" => "/Images/icons/project.png",
             "Diverse" => "/Images/icons/diverse.png",
-            _ => null
+            _ => "Images/icons/default-icon.png"
         };
     }
 
