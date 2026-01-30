@@ -72,7 +72,7 @@ public partial class EditCategory : ComponentBase
         if (coverImage is not null)
         {
             selectedCategory.CoverImgPath =
-                await imageService.UploadImageAsync(coverImage,
+                await BlobStorageService.UploadImageAsync(coverImage,
                     "categories");
             isUploaded = true;
         }
