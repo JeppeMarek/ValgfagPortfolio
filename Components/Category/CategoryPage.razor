@@ -1,55 +1,46 @@
 @page "/category/{Id:int}"
-@using Microsoft.IdentityModel.Tokens
+@rendermode InteractiveServer
 @inject ICategoryService categoryService
 @inject NavigationManager navigationManager
-@rendermode InteractiveServer
-
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <h3>Category</h3>
 <AuthorizeView>
     <MudButton OnClick="@OnNewPostClicked" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
 </AuthorizeView>
-@if (selectedCategory != null)
+@if (Id > 0)
 {
-    <h2>@selectedCategory.Title</h2>
-    <p>@posts?.Count</p>
-    <table class="table table-hover bg-white">
-        <thead>
-        <tr>
-            <th scope="col">Kategori</th>
-            <th scope="col">Indhold</th>
-            <th scope="col">Oprettet</th>
-            <th scope="col">Redigeret</th>
-            <th scope="col" class="text-center">
-                <i class="bi bi-gear-fill"></i>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @if (!posts.IsNullOrEmpty())
-        {
-            @foreach (var post in posts.OrderByDescending(p => p.DateEdited))
-            {
-                createdDate = post.DateCreated.ToString("dd/MM | HH:mm");
-                lastEditedDate = post.DateEdited.ToString("dd/MM | HH:mm");
-                <tr @onclick="@(() => OnRowClick(post.Id))" style="cursor: pointer">
-                    <td>@post.Title</td>
-                    <td >@(post.Content.Length > 75 ? post.Content.Substring(0,55)+"......" : post.Content)</td>
-                    <td>@createdDate</td>
-                    <td>@lastEditedDate</td>
-                    <td>
-                        <MudButton OnClick="@(() => OnRowClick(post.Id))"
-                                   StartIcon="@Icons.Material.Filled.FileOpen"></MudButton>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <MudText Typo="Typo.body2">Ingen opslag endnu..</MudText>
-        }
-        </tbody>
-    </table>
+    if (posts.Count <= 0)
+    {
+        <MudText>Ingen opslag...</MudText>
+    }
+    else
+    {
+        <h2>@selectedCategory.Title</h2>
+        <p>Opslag i kategori: @posts?.Count</p>
+        <MudTable T="Post" Items="@posts" Hover="true" SortLabel="Sort By" OnRowClick="OnRowClick">
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Post, object>(p => p.Title)">Titel</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Post, object>(p => p.DateCreated)">Oprettet</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel Enabled="@enabled" SortBy="new Func<Post, object>(p => p.DateEdited)">Redigeret
+                    </MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Titel">@context.Title</MudTd>
+                <MudTd DataLabel="Sign">@context.Content</MudTd>
+                <MudTd DataLabel="Name">@context.DateCreated</MudTd>
+                <MudTd DataLabel="Position">@context.DateEdited</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new[] { 10, 25, 50, 100 }"/>
+            </PagerContent>
+        </MudTable>
+    }
 }
 else
 {
@@ -62,16 +53,18 @@ else
     private int postId;
     private string createdDate;
     private string lastEditedDate;
-    private Category selectedCategory;
-    private List<Post>? posts;
+    private Category selectedCategory = new();
+    private List<Post>? posts = new();
     private List<BreadcrumbItem> breadcrumbItems = new();
+    private readonly bool enabled = true;
 
-    private void OnRowClick(int selectedId)
+    private void OnRowClick(TableRowClickEventArgs<Post> args)
     {
-        navigationManager.NavigateTo($"/posts/{selectedId}");
+        var post = args.Item;
+        navigationManager.NavigateTo($"/posts/{post.Id}");
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         try
         {
@@ -83,6 +76,7 @@ else
             };
             CategoryTitle = selectedCategory.Title;
             posts = selectedCategory?.Posts ?? new List<Post>();
+            await InvokeAsync(StateHasChanged);
         }
         catch (Exception e)
         {

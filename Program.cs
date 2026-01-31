@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
@@ -56,7 +57,7 @@ builder.Services.AddSingleton(sp => new BlobServiceClient(blobStorageConnection)
 builder.Services.AddSingleton<IBlobStorageService, BlobStorageService>();
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(defaultConnection));
+    options.UseSqlServer(defaultConnection, sql => { sql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null); }));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Application user from Identity and DbContext
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -94,6 +95,13 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 // Seed admin
-await AdminSeed.EnsureAdminAsync(app.Services);
+try
+{
+    await AdminSeed.EnsureAdminAsync(app.Services);
+}
+catch (SqlException e)
+{
+    Console.WriteLine(e);
+}
 
 app.Run();
