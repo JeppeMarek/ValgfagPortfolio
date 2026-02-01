@@ -32,7 +32,7 @@ public class CategoryRepository : IRepository<Category>
     public async Task<Category> GetEntityByIdAsync(int id)
     {
         var category = await context._Categories.Include(c => c.Posts)
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .FirstAsync(c => c.Id == id);
         return category;
     }
 

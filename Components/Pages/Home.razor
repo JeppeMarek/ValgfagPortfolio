@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using Microsoft.IdentityModel.Tokens
-@rendermode InteractiveServer
+@attribute [StreamRendering]
 @inject ICategoryService categoryService
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
@@ -24,6 +24,11 @@
     }
     else
     {
-        <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Warning">Ingen kategorier fundet..</MudText>
+        <MudCard>
+            <MudSkeleton Height="50" Width="75" Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle"/>
+            <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text"/>
+        </MudCard>
+        <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Warning">Indlæser</MudText>
+        <MudCard/>
     }
 </MudGrid>

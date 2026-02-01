@@ -1,32 +1,40 @@
 @page "/category/{Id:int}"
-@rendermode InteractiveServer
+@attribute [StreamRendering]
 @inject ICategoryService categoryService
 @inject NavigationManager navigationManager
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <h3>Category</h3>
 <AuthorizeView>
-    <MudButton OnClick="@OnNewPostClicked" StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag</MudButton>
+    <MudButton Href=@($"/category/{Id}/posts/new") StartIcon="@Icons.Material.Filled.AddToQueue">Opret nyt opslag
+    </MudButton>
 </AuthorizeView>
 @if (Id > 0)
 {
     if (posts.Count <= 0)
     {
-        <MudText>Ingen opslag...</MudText>
+        <MudSkeleton/>
+        <MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px"/>
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="110px"/>
+        <MudText>Indlæser opslag...</MudText>
     }
     else
     {
         <h2>@selectedCategory.Title</h2>
         <p>Opslag i kategori: @posts?.Count</p>
-        <MudTable T="Post" Items="@posts" Hover="true" SortLabel="Sort By" OnRowClick="OnRowClick">
+        <MudTable T="Post" Items="@posts" Breakpoint="Breakpoint.Sm"
+                   Hover="true" SortLabel="Sort By" OnRowClick="@((args) => navigationManager.NavigateTo($"/posts/{args.Item.Id}"))">
             <HeaderContent>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Post, object>(p => p.Title)">Titel</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Post, object>(p => p.Content)">Indhold</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
                     <MudTableSortLabel SortBy="new Func<Post, object>(p => p.DateCreated)">Oprettet</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel Enabled="@enabled" SortBy="new Func<Post, object>(p => p.DateEdited)">Redigeret
+                    <MudTableSortLabel SortBy="new Func<Post, object>(p => p.DateEdited)">Redigeret
                     </MudTableSortLabel>
                 </MudTh>
             </HeaderContent>
@@ -35,6 +43,9 @@
                 <MudTd DataLabel="Sign">@context.Content</MudTd>
                 <MudTd DataLabel="Name">@context.DateCreated</MudTd>
                 <MudTd DataLabel="Position">@context.DateEdited</MudTd>
+                <MudTd>
+                    <MudButton Href=@($"/posts/{context.Id}")>Åbn</MudButton>
+                </MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new[] { 10, 25, 50, 100 }"/>
@@ -57,17 +68,12 @@ else
     private List<Post>? posts = new();
     private List<BreadcrumbItem> breadcrumbItems = new();
     private readonly bool enabled = true;
-
-    private void OnRowClick(TableRowClickEventArgs<Post> args)
-    {
-        var post = args.Item;
-        navigationManager.NavigateTo($"/posts/{post.Id}");
-    }
-
+    
     protected override async Task OnParametersSetAsync()
     {
         try
         {
+            Console.WriteLine("Mojn");
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
             breadcrumbItems = new List<BreadcrumbItem>
             {
@@ -83,11 +89,6 @@ else
             Console.WriteLine(e);
             posts = new List<Post>();
         }
-    }
-
-    private void OnNewPostClicked()
-    {
-        navigationManager.NavigateTo($"/category/{Id}/posts/new");
     }
 
 }

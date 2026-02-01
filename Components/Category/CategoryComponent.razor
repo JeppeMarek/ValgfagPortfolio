@@ -36,6 +36,7 @@
             <MudButton Variant="Variant.Text" Color="Color.Primary">
                 <a href="/category/@SelectedCategory.Id">Åbn kategori</a>
             </MudButton>
+
             <AuthorizeView>
                 <MudButton OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
                     kategori
@@ -58,8 +59,12 @@
     private async Task DeleteCategoryAsync()
     {
         var blobName = Path.GetFileName(SelectedCategory.CoverImgPath);
-        await BlobService.DeleteBlobAsync(blobName);
-        await CategoryService.DeleteCategoryAsync(SelectedCategory);
+        if (!blobName.IsNullOrEmpty())
+        {
+            await BlobService.DeleteBlobAsync(blobName);
+            await CategoryService.DeleteCategoryAsync(SelectedCategory);
+        }
+
         Nav.Refresh(true);
     }
 
