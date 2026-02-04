@@ -1,0 +1,114 @@
+@page "/category/{Id:int}"
+@rendermode InteractiveServer
+
+@inject ICategoryService CategoryService
+@inject IPostService PostService
+@if (Category is null)
+{
+    <MudProgressCircular Indeterminate/>
+}
+else
+{
+    <!-- INTRO / HEADER -->
+    <MudPaper Class="pa-4 mb-4">
+        <MudText Typo="Typo.h4">@Category.Title</MudText>
+
+        @if (!string.IsNullOrWhiteSpace(Category.Description))
+        {
+            <MudCollapse Expanded="@showIntro">
+                <MudMarkdown Content="@Category.Description"/>
+            </MudCollapse>
+
+            <MudButton Variant="Variant.Text"
+                       OnClick="@(() => showIntro = !showIntro)">
+                @(showIntro ? "Vis mindre" : "Læs mere")
+            </MudButton>
+        }
+    </MudPaper>
+
+    <!-- MAIN LAYOUT -->
+    <MudGrid>
+        <!-- CENTER: SUBCATEGORIES -->
+        <MudItem xs="12" md="8">
+            <MudGrid>
+                @foreach (var sub in SubCategories)
+                {
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Style="height:100%">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">@sub.Title</MudText>
+
+                                @if (!string.IsNullOrWhiteSpace(sub.ShortDescription))
+                                {
+                                    <MudText Typo="Typo.body2" Class="mt-2">
+                                        @sub.ShortDescription
+                                    </MudText>
+                                }
+                            </MudCardContent>
+
+                            <MudCardActions>
+                                <MudButton Href="@($"/category/{sub.Id}")"
+                                           Variant="Variant.Text">
+                                    Åbn
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+
+        <!-- RIGHT: RECENT POSTS -->
+        <MudItem xs="12" md="4">
+            <MudPaper Class="pa-4">
+                <MudText Typo="Typo.h6">Seneste ændringer</MudText>
+
+                @if (RecentPosts.Any())
+                {
+                    <MudList Dense="true">
+                        @foreach (var post in RecentPosts)
+                        {
+                            <MudListItem Href="@($"/post/{post.Id}")">
+                                <MudText Typo="Typo.subtitle2">
+                                    @post.Title
+                                </MudText>
+                                <MudText Typo="Typo.caption">
+                                    @post.UpdatedAt.ToShortDateString()
+                                </MudText>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+                else
+                {
+                    <MudText Typo="Typo.caption" Class="mt-2">
+                        Ingen ændringer endnu.
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private Category? Category;
+    private readonly List<Category> SubCategories = new();
+    private readonly List<Post> RecentPosts = new();
+
+    private bool showIntro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Category = await CategoryService.GetCategoryByIdAsync(Id);
+
+        // SubCategories = await CategoryService(Id);
+        //
+        // RecentPosts = await PostService.GetRecentByCategoryAsync(
+        //     categoryId: Id,
+        //     take: 5
+        // );
+    }
+
+}

@@ -1,6 +1,5 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
@@ -28,7 +27,6 @@ builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 // DI Service
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<IImageService, ImageService>();
 
 
 // MudBlazor
@@ -94,14 +92,5 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
-// Seed admin
-try
-{
-    await AdminSeed.EnsureAdminAsync(app.Services);
-}
-catch (SqlException e)
-{
-    Console.WriteLine(e);
-}
 
 app.Run();
