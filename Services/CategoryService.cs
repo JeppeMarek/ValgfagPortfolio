@@ -55,4 +55,11 @@ public class CategoryService : ICategoryService
         if (success) await repository.DeleteEntityAsync(category);
         return success;
     }
+
+    public async Task<List<Category>> GetSubCategoriesAsync(int id)
+    {
+        categories = await repository.GetAllEntitiesAsync();
+        var subCategories = categories.Where(parent => parent.ParentCategoryId == id).ToList();
+        return subCategories;
+    }
 }

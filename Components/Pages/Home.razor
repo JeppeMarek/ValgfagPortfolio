@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using Microsoft.IdentityModel.Tokens
-@attribute [StreamRendering]
+@rendermode InteractiveServer
 @inject ICategoryService categoryService
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <PageTitle>Jeppe Marek Portfolio</PageTitle>

@@ -9,4 +9,5 @@ public interface ICategoryService
     Task<Category> GetCategoryByIdAsync(int id);
     Task<bool> UpdateCategoryAsync(Category category);
     Task<bool> DeleteCategoryAsync(Category category);
+    Task<List<Category>> GetSubCategoriesAsync(int id);
 }

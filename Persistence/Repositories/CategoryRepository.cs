@@ -25,13 +25,19 @@ public class CategoryRepository : IRepository<Category>
 
     public async Task<List<Category>> GetAllEntitiesAsync()
     {
-        return await context._Categories.ToListAsync();
+        return await context._Categories
+            .Include(c => c.ParentCategory)
+            .Include(c => c.Children)
+            .ToListAsync();
     }
 
 
     public async Task<Category> GetEntityByIdAsync(int id)
     {
-        var category = await context._Categories.Include(c => c.Posts)
+        var category = await context._Categories
+            .Include(c => c.ParentCategory)
+            .Include(c => c.Children)
+            .Include(c => c.Posts)
             .FirstAsync(c => c.Id == id);
         return category;
     }

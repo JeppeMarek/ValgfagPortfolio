@@ -1,4 +1,5 @@
-@page "/category/{Id:int}"
+@page "/topcategory/{id}"
+@using Microsoft.IdentityModel.Tokens
 @rendermode InteractiveServer
 
 @inject ICategoryService CategoryService
@@ -37,12 +38,24 @@ else
                         <MudCard Style="height:100%">
                             <MudCardContent>
                                 <MudText Typo="Typo.h6">@sub.Title</MudText>
-
-                                @if (!string.IsNullOrWhiteSpace(sub.ShortDescription))
+                                @if (!sub.Description.IsNullOrEmpty())
                                 {
-                                    <MudText Typo="Typo.body2" Class="mt-2">
-                                        @sub.ShortDescription
-                                    </MudText>
+                                    if (sub.Description.Length >= 100)
+                                    {
+                                        <MudButton
+                                            OnClick="@OnExpandCollapseClick">@(isExpanded ? "Læs mindre.." : "Læs Mere..")</MudButton>
+                                        <MudDivider/>
+                                        <MudCollapse Expanded="isExpanded">@sub.Description</MudCollapse>
+                                    }
+                                    else
+                                    {
+                                        <MudText
+                                            Typo="Typo.body1">@(sub.Description.IsNullOrEmpty() ? "" : sub.Description)</MudText>
+                                    }
+                                }
+                                else
+                                {
+                                    <MudProgressCircular Indeterminate/>
                                 }
                             </MudCardContent>
 
@@ -65,7 +78,7 @@ else
 
                 @if (RecentPosts.Any())
                 {
-                    <MudList Dense="true">
+                    <MudList Dense="true" T="Post">
                         @foreach (var post in RecentPosts)
                         {
                             <MudListItem Href="@($"/post/{post.Id}")">
@@ -73,7 +86,7 @@ else
                                     @post.Title
                                 </MudText>
                                 <MudText Typo="Typo.caption">
-                                    @post.UpdatedAt.ToShortDateString()
+                                    @post.DateEdited.ToShortDateString()
                                 </MudText>
                             </MudListItem>
                         }
@@ -90,25 +103,3 @@ else
     </MudGrid>
 }
 
-@code {
-    [Parameter] public int Id { get; set; }
-
-    private Category? Category;
-    private readonly List<Category> SubCategories = new();
-    private readonly List<Post> RecentPosts = new();
-
-    private bool showIntro;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Category = await CategoryService.GetCategoryByIdAsync(Id);
-
-        // SubCategories = await CategoryService(Id);
-        //
-        // RecentPosts = await PostService.GetRecentByCategoryAsync(
-        //     categoryId: Id,
-        //     take: 5
-        // );
-    }
-
-}
