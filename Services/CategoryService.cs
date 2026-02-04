@@ -33,7 +33,7 @@ public class CategoryService : ICategoryService
     public async Task<List<Category>> GetAllCategoriesAsync()
     {
         categories = await repository.GetAllEntitiesAsync();
-        return categories.Count == 0 ? new List<Category>() : categories;
+        return categories.Count < 0 ? new List<Category>() : categories;
     }
 
     public async Task<Category> GetCategoryByIdAsync(int id)

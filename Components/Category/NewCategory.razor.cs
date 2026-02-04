@@ -7,13 +7,20 @@ namespace ValgfagPortfolio.Components.Category;
 
 public partial class NewCategory : ComponentBase
 {
-    private readonly Model.Category newCategory = new();
     private List<BreadcrumbItem> breadcrumbItems = new();
+    
+    private readonly Model.Category newCategory = new();
+    private int selectedParentCategoryId;
+    
+    private List<Model.Category> categories = new();
+    
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
-    private string[] errors = { };
-    private MudForm form;
+    
     private bool isValid;
+    private MudForm form;
+    private string[] errors = { };
+    
     [Inject] private IBlobStorageService BlobStorageService { get; set; }
     [Inject] private ICategoryService CategoryService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
@@ -26,6 +33,8 @@ public partial class NewCategory : ComponentBase
             new("Home", "/"),
             new("Ny kategori", null, true)
         };
+        categories = await CategoryService.GetAllCategoriesAsync();
+        selectedParentCategoryId = newCategory.ParentCategoryId ?? 0;
     }
 
     private async Task ResetFormAndValidationAsync()
@@ -95,6 +104,8 @@ public partial class NewCategory : ComponentBase
 
         try
         {
+            newCategory.ParentCategoryId =
+                selectedParentCategoryId == 0 ? null : selectedParentCategoryId;
             var isCoverUploaded = await SetCoverImageAsync();
             if (isCoverUploaded) SetIcon();
             isValid = await CategoryService.CreateCategoryAsync(newCategory);

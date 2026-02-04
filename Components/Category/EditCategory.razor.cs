@@ -8,11 +8,13 @@ namespace ValgfagPortfolio.Components.Category;
 public partial class EditCategory : ComponentBase
 {
     private List<BreadcrumbItem> breadcrumbItems = new();
+    private List<Model.Category> categories = new();
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
     private string[] errors = { };
     private MudForm form;
     private bool isValid;
+    private int selectedParentCategoryId;
     [Parameter] public int Id { get; set; }
     [Required] public Model.Category selectedCategory { get; set; } = new();
     private string? selectedIcon { get; set; }
@@ -24,6 +26,10 @@ public partial class EditCategory : ComponentBase
         {
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
             if (selectedCategory is null) throw new NullReferenceException("Category not found " + Id);
+            categories = (await categoryService.GetAllCategoriesAsync())
+                .Where(c => c.Id != selectedCategory.Id)
+                .ToList();
+            selectedParentCategoryId = selectedCategory.ParentCategoryId ?? 0;
             breadcrumbItems = new List<BreadcrumbItem>
             {
                 new("Home", "/"),
@@ -106,6 +112,8 @@ public partial class EditCategory : ComponentBase
             return;
         try
         {
+            selectedCategory.ParentCategoryId =
+                selectedParentCategoryId == 0 ? null : selectedParentCategoryId;
             await SetCoverImageAsync();
             isValid = await categoryService.UpdateCategoryAsync(selectedCategory);
             if (isValid)

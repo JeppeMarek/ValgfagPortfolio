@@ -15,6 +15,14 @@
 
                 <MudTextField T="string" Label="Beskrivelse" @bind-Value="newCategory.Description"
                               Required="false" MaxLength="200"/>
+                <MudText Typo="Typo.subtitle2">Overkategori</MudText>
+                <MudRadioGroup T="int" @bind-Value="selectedParentCategoryId">
+                    <MudRadio T="int" Value="0">Ingen (hovedkategori)</MudRadio>
+                    @foreach (var category in categories)
+                    {
+                        <MudRadio T="int" Value="@category.Id">@category.Title</MudRadio>
+                    }
+                </MudRadioGroup>
                 <MudFileUpload T="IBrowserFile" Accept="image/*" MaximumFileCount="1"
                                OnFilesChanged="OnCoverImageSelected">
                     <ActivatorContent>
