@@ -18,7 +18,7 @@
                 <MudText Typo="Typo.subtitle2">Overkategori</MudText>
                 <MudRadioGroup T="int" @bind-Value="selectedParentCategoryId">
                     <MudRadio T="int" Value="0">Ingen (hovedkategori)</MudRadio>
-                    @foreach (var category in categories)
+                    @foreach (var category in parentCategories)
                     {
                         <MudRadio T="int" Value="@category.Id">@category.Title</MudRadio>
                     }

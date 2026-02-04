@@ -16,10 +16,10 @@
             {
                 @if (SelectedCategory.Description.Length >= 100)
                 {
-                    <MudButton OnClick="@OnExpandCollapseClick">@(expanded ? "Fold beskrivelse" : "Udvid beskrivelse")
+                    <MudButton OnClick="@OnExpandCollapseClick">@(isExpanded ? "Fold beskrivelse" : "Udvid beskrivelse")
                     </MudButton>
                     <MudDivider/>
-                    <MudCollapse Expanded="expanded">@SelectedCategory.Description</MudCollapse>
+                    <MudCollapse Expanded="isExpanded">@SelectedCategory.Description</MudCollapse>
                 }
                 else
                 {
@@ -34,7 +34,10 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Text" Color="Color.Primary">
-                <a href="/category/@SelectedCategory.Id">Åbn kategori</a>
+                <a href="@(SelectedCategory.ParentCategoryId > 0
+                             ? $"/category/{SelectedCategory.Id}"
+                             : $"/topcategory/{SelectedCategory.Id}")">Åbn kategori
+                </a>
             </MudButton>
 
             <AuthorizeView>
@@ -54,7 +57,7 @@
 @code
 {
     [Parameter] public Category SelectedCategory { get; set; }
-    private bool expanded;
+    private bool isExpanded;
 
     private async Task DeleteCategoryAsync()
     {
@@ -98,6 +101,6 @@
 
     private void OnExpandCollapseClick()
     {
-        expanded = !expanded;
+        isExpanded = !isExpanded;
     }
 }

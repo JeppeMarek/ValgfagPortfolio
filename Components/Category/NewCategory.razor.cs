@@ -12,7 +12,7 @@ public partial class NewCategory : ComponentBase
     private readonly Model.Category newCategory = new();
     private int selectedParentCategoryId;
     
-    private List<Model.Category> categories = new();
+    private List<Model.Category> parentCategories = new();
     
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
@@ -33,7 +33,8 @@ public partial class NewCategory : ComponentBase
             new("Home", "/"),
             new("Ny kategori", null, true)
         };
-        categories = await CategoryService.GetAllCategoriesAsync();
+        var allCategories = await CategoryService.GetAllCategoriesAsync();
+        parentCategories = allCategories.Where(parent => parent.ParentCategoryId is null).ToList();
         selectedParentCategoryId = newCategory.ParentCategoryId ?? 0;
     }
 

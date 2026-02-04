@@ -1,4 +1,4 @@
-@page "/topcategory/{id}"
+@page "/topcategory/{id:int}"
 @using Microsoft.IdentityModel.Tokens
 @rendermode InteractiveServer
 
@@ -11,22 +11,27 @@
 else
 {
     <!-- INTRO / HEADER -->
-    <MudPaper Class="pa-4 mb-4">
+    <MudPaper Class="pa-4 mb-5">
         <MudText Typo="Typo.h4">@Category.Title</MudText>
 
-        @if (!string.IsNullOrWhiteSpace(Category.Description))
+        @if (!Category.Description.IsNullOrEmpty())
         {
-            <MudCollapse Expanded="@showIntro">
-                <MudMarkdown Content="@Category.Description"/>
-            </MudCollapse>
-
-            <MudButton Variant="Variant.Text"
-                       OnClick="@(() => showIntro = !showIntro)">
-                @(showIntro ? "Vis mindre" : "Læs mere")
-            </MudButton>
+            <MudText Typo="Typo.h5">Om @Category.Title</MudText>
+            @if (Category.Description.Length >= 100)
+            {
+                <MudButton OnClick="@OnExpandCollapseClick">@(isExpanded ? "Læs mindre..." : "Læs mere...")
+                </MudButton>
+                <MudDivider/>
+                <MudCollapse  Expanded="isExpanded">@Category.Description</MudCollapse>
+            }
+            else
+            {
+                <MudText
+                    Typo="Typo.body1">@(Category.Description.IsNullOrEmpty() ? "" : Category.Description)</MudText>
+            }
         }
     </MudPaper>
-
+    
     <!-- MAIN LAYOUT -->
     <MudGrid>
         <!-- CENTER: SUBCATEGORIES -->
@@ -34,38 +39,8 @@ else
             <MudGrid>
                 @foreach (var sub in SubCategories)
                 {
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudCard Style="height:100%">
-                            <MudCardContent>
-                                <MudText Typo="Typo.h6">@sub.Title</MudText>
-                                @if (!sub.Description.IsNullOrEmpty())
-                                {
-                                    if (sub.Description.Length >= 100)
-                                    {
-                                        <MudButton
-                                            OnClick="@OnExpandCollapseClick">@(isExpanded ? "Læs mindre.." : "Læs Mere..")</MudButton>
-                                        <MudDivider/>
-                                        <MudCollapse Expanded="isExpanded">@sub.Description</MudCollapse>
-                                    }
-                                    else
-                                    {
-                                        <MudText
-                                            Typo="Typo.body1">@(sub.Description.IsNullOrEmpty() ? "" : sub.Description)</MudText>
-                                    }
-                                }
-                                else
-                                {
-                                    <MudProgressCircular Indeterminate/>
-                                }
-                            </MudCardContent>
-
-                            <MudCardActions>
-                                <MudButton Href="@($"/category/{sub.Id}")"
-                                           Variant="Variant.Text">
-                                    Åbn
-                                </MudButton>
-                            </MudCardActions>
-                        </MudCard>
+                    <MudItem xs="12" sm="6" lg="4">
+                        <CategoryComponent SelectedCategory="@sub"></CategoryComponent>
                     </MudItem>
                 }
             </MudGrid>
@@ -102,4 +77,3 @@ else
         </MudItem>
     </MudGrid>
 }
-

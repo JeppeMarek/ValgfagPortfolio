@@ -8,7 +8,7 @@ namespace ValgfagPortfolio.Components.Category;
 public partial class EditCategory : ComponentBase
 {
     private List<BreadcrumbItem> breadcrumbItems = new();
-    private List<Model.Category> categories = new();
+    private List<Model.Category> parentCategories = new();
     private IBrowserFile? coverImage;
     private string? coverPreviewURL;
     private string[] errors = { };
@@ -26,8 +26,8 @@ public partial class EditCategory : ComponentBase
         {
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
             if (selectedCategory is null) throw new NullReferenceException("Category not found " + Id);
-            categories = (await categoryService.GetAllCategoriesAsync())
-                .Where(c => c.Id != selectedCategory.Id)
+            parentCategories = (await categoryService.GetAllCategoriesAsync())
+                .Where(c => c.Id != selectedCategory.Id && c.ParentCategoryId is null)
                 .ToList();
             selectedParentCategoryId = selectedCategory.ParentCategoryId ?? 0;
             breadcrumbItems = new List<BreadcrumbItem>

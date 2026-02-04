@@ -10,7 +10,6 @@ public partial class TopCategory : ComponentBase
     private bool isExpanded;
     private List<Post> RecentPosts = new();
 
-    private bool showIntro;
     private List<Model.Category> SubCategories = new();
     [Parameter] public int Id { get; set; }
 
