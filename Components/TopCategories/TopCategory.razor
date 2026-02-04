@@ -4,6 +4,13 @@
 
 @inject ICategoryService CategoryService
 @inject IPostService PostService
+<AuthorizeView>
+    <Authorized>
+        <MudButton Size="Size.Large" Href="/category/new/" StartIcon="@Icons.Material.Filled.AddBox">Tilføj ny
+            kategori
+        </MudButton>
+    </Authorized>
+</AuthorizeView>
 @if (Category is null)
 {
     <MudProgressCircular Indeterminate/>

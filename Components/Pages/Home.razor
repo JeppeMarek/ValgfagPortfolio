@@ -11,24 +11,35 @@
         </MudButton>
     </Authorized>
 </AuthorizeView>
-<MudGrid>
-    <br/>
-    @if (!categories.IsNullOrEmpty())
-    {
-        foreach (var cat in categories)
+<br/>
+@if (!categories.IsNullOrEmpty())
+{
+    <MudText Typo="Typo.h4" Class="mt-4 mb-2">Alle overkategorier</MudText>
+    <MudGrid Spacing="2">
+        @foreach (var cat in parentCategories)
         {
-            <MudItem sm="5">
-                <CategoryComponent SelectedCategory=@cat></CategoryComponent>
+            <MudItem xs="12" sm="6" lg="4">
+                <CategoryComponent SelectedCategory="@cat"></CategoryComponent>
             </MudItem>
         }
-    }
-    else
-    {
-        <MudCard>
-            <MudSkeleton Height="50" Width="75" Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle"/>
-            <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text"/>
-        </MudCard>
-        <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Warning">Indlæser</MudText>
-        <MudCard/>
-    }
-</MudGrid>
+    </MudGrid>
+
+    <MudText Typo="Typo.h4" Class="mt-6 mb-2">Alle underkategorier</MudText>
+    <MudGrid Spacing="2">
+        @foreach (var cat in categories.Where(c => c.ParentCategoryId.HasValue))
+        {
+            <MudItem xs="12" sm="6" lg="4">
+                <CategoryComponent SelectedCategory="@cat"></CategoryComponent>
+            </MudItem>
+        }
+    </MudGrid>
+}
+else
+{
+    <MudCard>
+        <MudSkeleton Height="50" Width="75" Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle"/>
+        <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text"/>
+    </MudCard>
+    <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Warning">Ingen kategorier</MudText>
+    <MudCard/>
+}
