@@ -5,7 +5,7 @@
 @inject NavigationManager Nav
 <MudPaper>
     <MudCard Elevation="3" Class="rounded-4 card">
-        <MudCardMedia Image="@SelectedCategory.CoverImgPath" Class="object-fit-cover" Height="140"></MudCardMedia>
+            <MudImage Src="@SelectedCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
         <MudCardContent>
             <MudText Style="@HeaderStyle" Typo="Typo.h5" Class="category-card__title">
                 @SelectedCategory.Title
