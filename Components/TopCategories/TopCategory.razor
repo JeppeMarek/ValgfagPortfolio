@@ -29,7 +29,7 @@ else
                 <MudButton OnClick="@OnExpandCollapseClick">@(isExpanded ? "Læs mindre..." : "Læs mere...")
                 </MudButton>
                 <MudDivider/>
-                <MudCollapse  Expanded="isExpanded">@Category.Description</MudCollapse>
+                <MudCollapse Expanded="isExpanded">@Category.Description</MudCollapse>
             }
             else
             {
@@ -38,7 +38,7 @@ else
             }
         }
     </MudPaper>
-    
+
     <!-- MAIN LAYOUT -->
     <MudGrid>
         <!-- CENTER: SUBCATEGORIES -->
@@ -46,7 +46,7 @@ else
             <MudGrid>
                 @foreach (var sub in SubCategories)
                 {
-                    <MudItem xs="12" sm="6" lg="4">
+                    <MudItem xs="6" sm="6" lg="8">
                         <CategoryComponent SelectedCategory="@sub"></CategoryComponent>
                     </MudItem>
                 }
@@ -63,7 +63,7 @@ else
                     <MudList Dense="true" T="Post">
                         @foreach (var post in RecentPosts)
                         {
-                            <MudListItem Href="@($"/post/{post.Id}")">
+                            <MudListItem Href="@($"/posts/{post.Id}")">
                                 <MudText Typo="Typo.subtitle2">
                                     @post.Title
                                 </MudText>

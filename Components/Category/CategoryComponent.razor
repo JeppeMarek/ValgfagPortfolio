@@ -3,9 +3,9 @@
 @inject ICategoryService CategoryService
 @inject IBlobStorageService BlobService
 @inject NavigationManager Nav
-<MudPaper Class="category-card">
-    <MudCard Elevation="3" Class="rounded-4 category-card__inner">
-        <MudCardMedia Image="@SelectedCategory.CoverImgPath" Height="140"></MudCardMedia>
+<MudPaper>
+    <MudCard Elevation="3" Class="rounded-4 card">
+        <MudCardMedia Image="@SelectedCategory.CoverImgPath" Class="object-fit-cover" Height="140"></MudCardMedia>
         <MudCardContent>
             <MudText Style="@HeaderStyle" Typo="Typo.h5" Class="category-card__title">
                 @SelectedCategory.Title
@@ -36,7 +36,8 @@
             }
         </MudCardContent>
         <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.FileOpen">
+            <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.FileOpen">
                 <a href="@(SelectedCategory.ParentCategoryId > 0
                              ? $"/category/{SelectedCategory.Id}"
                              : $"/topcategory/{SelectedCategory.Id}")">Åbn kategori
@@ -44,11 +45,13 @@
             </MudButton>
 
             <AuthorizeView>
-                <MudButton Size="Size.Small" OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">Slet
+                <MudButton Size="Size.Small" OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">
+                    Slet
                     kategori
                 </MudButton>
 
-                <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">Rediger
+                <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">
+                    Rediger
                     kategori
                 </MudButton>
             </AuthorizeView>
@@ -56,21 +59,6 @@
         </MudCardActions>
     </MudCard>
 </MudPaper>
-
-<style>
-    .category-card {
-        max-width: 360px;
-    }
-    .category-card__inner {
-        width: 100%;
-    }
-    .category-card__title {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 6px;
-    }
-</style>
 
 @code
 {

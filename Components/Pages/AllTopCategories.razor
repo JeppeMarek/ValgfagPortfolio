@@ -1,0 +1,31 @@
+@page "/alltopcategories"
+@inject ICategoryService CategoryService
+@rendermode InteractiveServer
+
+<h3>Alle overkategorier</h3>
+@if (topCategories.Count > 0)
+{
+    <MudGrid Spacing="2">
+        @foreach (var category in topCategories)
+        {
+            <MudItem Class="align-items-lg-start">
+                <CategoryComponent SelectedCategory="@category"></CategoryComponent>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    private List<Category> allCategories = new();
+    private List<Category> topCategories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allCategories = await CategoryService.GetAllCategoriesAsync();
+        if (allCategories.Count > 0)
+        {
+            topCategories = allCategories.Where(c => c.ParentCategoryId == null).ToList();
+        }
+    }
+
+}

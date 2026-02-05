@@ -1,20 +1,21 @@
-@using MudBlazor.Utilities
 @inherits LayoutComponentBase
 @* Required *@
-<MudThemeProvider />
-<MudPopoverProvider />
+<MudThemeProvider/>
+<MudPopoverProvider/>
 
 @* Needed for dialogs *@
-<MudDialogProvider />
+<MudDialogProvider/>
 
 @* Needed for snackbars *@
-<MudSnackbarProvider />
+<MudSnackbarProvider/>
 <MudThemeProvider Theme="Flatlytheme"/>
 @*Actual layout*@
 <div class="layout-container">
     <MudLayout>
-        <MudAppBar Elevation="1" Color="Color.Tertiary" Dense="true">
+        <MudAppBar Elevation="1" Color="Color.Tertiary" Dense="false">
             <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/" Class="navbar-brand">Portfolio</MudButton>
+            <MudButton href="/alltopcategories">Alle overkategorier</MudButton>
+            <MudButton href="/allcategories">Alle kategorier</MudButton>
             <MudSpacer/>
             <MudButtonGroup>
                 <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
@@ -33,12 +34,17 @@
 
     <footer class="footer" style="background: #41464b">
         <MudText Color="Color.Info" Typo="Typo.body2">
-            © @DateTime.Now.Year · Webpage by <a href="https://github.com/JeppeMarek">Jeppe Marek</a>
+            © @DateTime.Now.Year · Webpage by <a style="color:#89B482 " href="https://github.com/JeppeMarek">Jeppe
+                Marek</a>
         </MudText>
+        <MudLink Href="https://bootswatch.com">
+            <MudText Typo="Typo.subtitle2" Align="Align.End">Theme Flatly from: https://bootswatch.com</MudText>
+        </MudLink>
     </footer>
 </div>
 
 @code {
+
     /* 
 !
 * Bootswatch v5.3.3 (https://bootswatch.com)
@@ -63,7 +69,7 @@
             RippleOpacity = 0.1,
             HoverOpacity = 0.06,
             Surface = "rgba(255,255,255,1)",
-            Background = "rgba(255,255,255,1)",
+            Background = Colors.BlueGray.Lighten5,
             BackgroundGray = "rgba(245,245,245,1)",
             ErrorContrastText = "rgba(255,255,255,1)",
             LinesInputs = "rgba(189,189,189,1)",
@@ -309,5 +315,5 @@
             Tooltip = 1600
         }
     };
-    
+
 }

@@ -1,0 +1,31 @@
+@page "/allcategories"
+@rendermode InteractiveServer
+<h3>AllCategories</h3>
+
+<MudGrid Spacing="2">
+    @if (allCategories.Count > 0)
+    {
+        foreach (var category in allCategories)
+        {
+            <MudItem Class="align-items-lg-start">
+                <CategoryComponent SelectedCategory="category"/>
+            </MudItem>
+        }
+    }
+    else
+    {
+        <MudText>Ingen kategorier</MudText>
+    }
+
+</MudGrid>
+
+@code {
+    [Inject] public ICategoryService CategoryService { get; set; }
+    private List<Category> allCategories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allCategories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+}
