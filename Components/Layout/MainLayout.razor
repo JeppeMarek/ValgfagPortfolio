@@ -12,19 +12,7 @@
 @*Actual layout*@
 <div class="layout-container">
     <MudLayout>
-        <MudAppBar Elevation="1" Color="Color.Tertiary" Dense="false">
-            <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/" Class="navbar-brand">Portfolio</MudButton>
-            <MudButton href="/alltopcategories">Alle overkategorier</MudButton>
-            <MudButton href="/allcategories">Alle kategorier</MudButton>
-            <MudSpacer/>
-            <MudButtonGroup>
-                <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
-                               Href="https://github.com/JeppeMarek"></MudIconButton>
-                <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
-                               Href="https://linkedin.com/in/jeppe-marek-b775b6328"></MudIconButton>
-            </MudButtonGroup>
-        </MudAppBar>
-
+        <NavMenu></NavMenu>
         <MudMainContent Class="main-content">
             <MudContainer MaxWidth="MaxWidth.Large" Class="content-wrapper">
                 @Body
