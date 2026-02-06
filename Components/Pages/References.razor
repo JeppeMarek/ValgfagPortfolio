@@ -2,7 +2,7 @@
 @rendermode InteractiveServer
 @inject NavigationManager nav
 <h3>Kilder</h3>
-<MudTable T="Reference" Items="references" Breakpoint="Breakpoint.Sm">
+<MudTable bind-SelectedItem="@selectedReference" T="Reference" Items="references" Breakpoint="Breakpoint.Sm">
     <HeaderContent>
         <MudTh>URL</MudTh>
         <MudTh>Titel</MudTh>
@@ -16,6 +16,11 @@
         <MudTd >@context.Author</MudTd>
         <MudTd >@context.Note</MudTd>
         <MudTd >@context.Subject</MudTd>
+        @* <AuthorizeView Context=""> *@
+        @*     <MudTd > *@
+        @*         <MudButton OnClick="@DeleteReferenceAsync">Slet</MudButton> *@
+        @*     </MudTd> *@
+        @* </AuthorizeView> *@
     </RowTemplate>
 </MudTable>
 
@@ -38,6 +43,8 @@
     private List<Reference> references = new();
     private Reference newReference = new();
     private MudForm form;
+    private int selectedId;
+    private Reference selectedReference;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,5 +69,12 @@
             await form.ResetAsync();
             nav.Refresh(true);
         }
+    }
+
+    private async Task DeleteReferenceAsync()
+    {
+        
+            await ReferenceService.DeleteReferenceAsync(selectedReference);
+        
     }
 }
