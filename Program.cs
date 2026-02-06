@@ -55,7 +55,7 @@ var blobStorageConnection = builder.Configuration.GetConnectionString("BlobStora
                                 "Connection string 'BlobStorage' not found.");
 
 builder.Services.AddSingleton(sp => new BlobServiceClient(blobStorageConnection));
-builder.Services.AddSingleton<IBlobStorageService, BlobStorageService>();
+builder.Services.AddSingleton<IBlobStorageService, ImageBlobStorageService>();
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(defaultConnection, sql => { sql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null); }));

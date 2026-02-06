@@ -1,11 +1,11 @@
+using System.Text;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using ValgfagPortfolio.Model;
 
 namespace ValgfagPortfolio.Services;
 
-public class BlobStorageService : IBlobStorageService
+public class ImageBlobStorageService : IBlobStorageService
 {
     private const string ContainerName = "images";
     private const long MaxFileSize = 5 * 1024 * 1024;
@@ -19,21 +19,21 @@ public class BlobStorageService : IBlobStorageService
 
     private readonly BlobServiceClient _client;
 
-    public BlobStorageService(BlobServiceClient client)
+    public ImageBlobStorageService(BlobServiceClient client)
     {
         _client = client;
     }
 
-    public async Task<Model.BlobContentInfo> GetBlobAsync(string name)
+    public async Task<BlobContentInfo> GetBlobAsync(string name)
     {
         var containerClient = _client.GetBlobContainerClient(ContainerName);
         var blobClient = containerClient.GetBlobClient(name);
         var blobDownloadInfo = await blobClient.DownloadAsync();
 
-        var blobInfo = new Model.BlobContentInfo 
-        { 
-            Content = blobDownloadInfo.Value.Content, 
-            ContentType = blobDownloadInfo.Value.ContentType 
+        var blobInfo = new BlobContentInfo
+        {
+            Content = blobDownloadInfo.Value.Content,
+            ContentType = blobDownloadInfo.Value.ContentType
         };
         return blobInfo;
     }
@@ -42,17 +42,15 @@ public class BlobStorageService : IBlobStorageService
     {
         var containerClient = _client.GetBlobContainerClient(ContainerName);
         var blobs = new List<string>();
-        
-        await foreach (var blobItem in containerClient.GetBlobsAsync())
-        {
-            blobs.Add(blobItem.Name);
-        }
 
-        
+        await foreach (var blobItem in containerClient.GetBlobsAsync()) blobs.Add(blobItem.Name);
+
+
         return blobs;
     }
 
-    public async Task<string> UploadImageAsync(IBrowserFile file, string folder, CancellationToken cancellationToken = default)
+    public async Task<string> UploadImageAsync(IBrowserFile file, string folder,
+        CancellationToken cancellationToken = default)
     {
         if (!AllowedTypes.Contains(file.ContentType))
             throw new InvalidOperationException("Ugyldigt filformat");
@@ -61,13 +59,13 @@ public class BlobStorageService : IBlobStorageService
             throw new InvalidOperationException("Filen er for stor. Max 5 MB");
 
         var containerClient = _client.GetBlobContainerClient(ContainerName);
-        
+
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
         var blobPath = $"{folder}/{fileName}";
         var blobClient = containerClient.GetBlobClient(blobPath);
 
         await using var stream = file.OpenReadStream(MaxFileSize);
-        await blobClient.UploadAsync(stream, overwrite: true, cancellationToken);
+        await blobClient.UploadAsync(stream, true, cancellationToken);
 
         return blobClient.Uri.ToString();
     }
@@ -81,7 +79,7 @@ public class BlobStorageService : IBlobStorageService
         var blobClient = containerClient.GetBlobClient(fileName);
 
         await using var fileStream = File.OpenRead(filePath);
-        await blobClient.UploadAsync(fileStream, overwrite: true);
+        await blobClient.UploadAsync(fileStream, true);
     }
 
     public async Task UploadContentBlobAsync(string content, string fileName)
@@ -89,8 +87,8 @@ public class BlobStorageService : IBlobStorageService
         var containerClient = _client.GetBlobContainerClient(ContainerName);
         var blobClient = containerClient.GetBlobClient(fileName);
 
-        await using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
-        await blobClient.UploadAsync(stream, overwrite: true);
+        await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        await blobClient.UploadAsync(stream, true);
     }
 
     public async Task DeleteBlobAsync(string name)
