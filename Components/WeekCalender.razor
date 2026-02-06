@@ -1,0 +1,110 @@
+<MudTable Class="mb-2 mt-2 rounded-4" Elevation="2" Items="@rows" Hover="true" Striped="true" Bordered="true">
+    <ColGroup>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+        <col style="width: 12.5%;"/>
+    </ColGroup>
+    <RowTemplate>
+        <MudTd DataLabel="">@context.Col1</MudTd>
+        <MudTd DataLabel="">
+            @if (context.Col2 == "DevOps")
+            {
+                <NavLink href="/topcategory/28">@context.Col2</NavLink>
+            }
+            else if (context.Col2 == "React Native")
+            {
+                <NavLink href="/topcategory/30">@context.Col2</NavLink>
+            }
+            else
+            {
+                @context.Col2
+            }
+        </MudTd>
+        <MudTd DataLabel="">
+            @if (context.Col3 == "DevOps")
+            {
+                <NavLink href="/topcategory/28">@context.Col3</NavLink>
+            }
+            else if (context.Col3 == "React Native")
+            {
+                <NavLink href="/topcategory/30">@context.Col3</NavLink>
+            }
+            else
+            {
+                @context.Col3
+            }
+        </MudTd>
+        <MudTd DataLabel="">
+            @if (context.Col4 == "DevOps")
+            {
+                <NavLink href="/topcategory/28">@context.Col4</NavLink>
+            }
+            else if (context.Col4 == "React Native")
+            {
+                <NavLink href="/topcategory/30">@context.Col4</NavLink>
+            }
+            else
+            {
+                @context.Col4
+            }
+        </MudTd>
+        <MudTd DataLabel="">
+            @if (context.Col5 == "DevOps")
+            {
+                <NavLink href="/topcategory/28">@context.Col5</NavLink>
+            }
+            else if (context.Col5 == "React Native")
+            {
+                <NavLink href="/topcategory/30">@context.Col5</NavLink>
+            }
+            else
+            {
+                @context.Col5
+            }
+        </MudTd>
+        <MudTd DataLabel="">
+            @if (context.Col6 == "DevOps")
+            {
+                <NavLink href="/topcategory/28">@context.Col6</NavLink>
+            }
+            else if (context.Col6 == "React Native")
+            {
+                <NavLink href="/topcategory/30">@context.Col6</NavLink>
+            }
+            else
+            {
+                @context.Col6
+            }
+        </MudTd>
+        <MudTd DataLabel="">@context.Col7</MudTd>
+        <MudTd DataLabel="">@context.Col8</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    public class TableRow
+    {
+        public string Col1 { get; set; }
+        public string Col2 { get; set; }
+        public string Col3 { get; set; }
+        public string Col4 { get; set; }
+        public string Col5 { get; set; }
+        public string Col6 { get; set; }
+        public string Col7 { get; set; }
+        public string Col8 { get; set; }
+    }
+
+    private readonly List<TableRow> rows = new()
+    {
+        new TableRow { Col1 = "Dag", Col2 = "Mandag", Col3 = "Tirsdag", Col4 = "Onsdag", Col5 = "Torsdag", Col6 = "Fredag", Col7 = "Lørdag", Col8 = "Søndag" },
+        new TableRow { Col1 = "Fag", Col2 = "DevOps", Col3 = "DevOps", Col4 = "React Native", Col5 = "React Native", Col6 = "Flex", Col7 = "Flex", Col8 = "Flex" },
+        new TableRow { Col1 = "Tid", Col2 = "08.00 - 14.00", Col3 = "08.00 - 14.00", Col4 = "08.00 - 14.00", Col5 = "08.00 - 14.00", Col6 = "08.00 - 14.00", Col7 = "12.00 - 15.00", Col8 = "12.00 - 15.00" }
+    };
+
+}

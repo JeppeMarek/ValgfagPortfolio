@@ -2,8 +2,13 @@
 @using Microsoft.IdentityModel.Tokens
 @rendermode InteractiveServer
 @inject ICategoryService categoryService
-<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <PageTitle>Jeppe Marek Portfolio</PageTitle>
+<BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
+<MyInformation></MyInformation>
+<MudDivider></MudDivider>
+<WeekCalender></WeekCalender>
+<MudDivider></MudDivider>
+
 <AuthorizeView>
     <Authorized>
         <MudButton Size="Size.Large" Href="/category/new/" StartIcon="@Icons.Material.Filled.AddBox">Tilføj ny

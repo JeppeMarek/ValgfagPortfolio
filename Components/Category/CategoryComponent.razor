@@ -3,62 +3,60 @@
 @inject ICategoryService CategoryService
 @inject IBlobStorageService BlobService
 @inject NavigationManager Nav
-<MudPaper>
-    <MudCard Elevation="3" Class="rounded-4 card">
-            <MudImage Src="@SelectedCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
-        <MudCardContent>
-            <MudText Style="@HeaderStyle" Typo="Typo.h5" Class="category-card__title">
-                @SelectedCategory.Title
-                <MudImage Src="@SelectedCategory.LogoImgPath" Height="18" Width="18"></MudImage>
-            </MudText>
-            @if (!SelectedCategory.Description.IsNullOrEmpty())
+<MudCard Elevation="3" Class="rounded-4 card">
+    <MudImage Src="@SelectedCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
+    <MudCardContent>
+        <MudText Style="@HeaderStyle" Typo="Typo.h5" Class="category-card__title">
+            @SelectedCategory.Title
+            <MudImage Src="@SelectedCategory.LogoImgPath" Height="18" Width="18"></MudImage>
+        </MudText>
+        @if (!SelectedCategory.Description.IsNullOrEmpty())
+        {
+            @if (SelectedCategory.Description.Length >= 100)
             {
-                @if (SelectedCategory.Description.Length >= 100)
-                {
-                    <MudButton Size="Size.Small" OnClick="@OnExpandCollapseClick">
-                        @(isExpanded ? "Fold beskrivelse" : "Udvid beskrivelse")
-                    </MudButton>
-                    <MudDivider/>
-                    <MudCollapse Expanded="isExpanded">
-                        <MudText Typo="Typo.body2">@SelectedCategory.Description</MudText>
-                    </MudCollapse>
-                }
-                else
-                {
-                    <MudText Typo="Typo.body2">
-                        @(SelectedCategory.Description.IsNullOrEmpty() ? "" : SelectedCategory.Description)
-                    </MudText>
-                }
+                <MudButton Size="Size.Small" OnClick="@OnExpandCollapseClick">
+                    @(isExpanded ? "Fold beskrivelse" : "Udvid beskrivelse")
+                </MudButton>
+                <MudDivider/>
+                <MudCollapse Expanded="isExpanded">
+                    <MudText Typo="Typo.body2">@SelectedCategory.Description</MudText>
+                </MudCollapse>
             }
             else
             {
-                <MudText Typo="Typo.body2">Ingen kategorier fundet denne gang</MudText>
+                <MudText Typo="Typo.body2">
+                    @(SelectedCategory.Description.IsNullOrEmpty() ? "" : SelectedCategory.Description)
+                </MudText>
             }
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
-                       StartIcon="@Icons.Material.Filled.FileOpen">
-                <a href="@(SelectedCategory.ParentCategoryId > 0
-                             ? $"/category/{SelectedCategory.Id}"
-                             : $"/topcategory/{SelectedCategory.Id}")">Åbn kategori
-                </a>
+        }
+        else
+        {
+            <MudText Typo="Typo.body2">Ingen kategorier fundet denne gang</MudText>
+        }
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
+                   StartIcon="@Icons.Material.Filled.FileOpen">
+            <a href="@(SelectedCategory.ParentCategoryId > 0
+                         ? $"/category/{SelectedCategory.Id}"
+                         : $"/topcategory/{SelectedCategory.Id}")">Åbn kategori
+            </a>
+        </MudButton>
+
+        <AuthorizeView>
+            <MudButton Size="Size.Small" OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">
+                Slet
+                kategori
             </MudButton>
 
-            <AuthorizeView>
-                <MudButton Size="Size.Small" OnClick="@DeleteCategoryAsync" StartIcon="@Icons.Material.Filled.Delete">
-                    Slet
-                    kategori
-                </MudButton>
+            <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">
+                Rediger
+                kategori
+            </MudButton>
+        </AuthorizeView>
 
-                <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditCategoryAsync">
-                    Rediger
-                    kategori
-                </MudButton>
-            </AuthorizeView>
-
-        </MudCardActions>
-    </MudCard>
-</MudPaper>
+    </MudCardActions>
+</MudCard>
 
 @code
 {
