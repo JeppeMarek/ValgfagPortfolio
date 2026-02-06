@@ -25,9 +25,11 @@ builder.Configuration.AddUserSecrets<Program>();
 // Dependecy Injection Repositories
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
+builder.Services.AddScoped<IRepository<Reference>, ReferenceRepository>();
 // DI Service
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IReferenceService, ReferenceService>();
 
 
 // MudBlazor

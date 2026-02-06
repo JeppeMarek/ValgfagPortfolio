@@ -11,7 +11,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Category> _Categories { get; set; }
     public DbSet<Post> Posts { get; set; }
-    public DbSet<Reference> References { get; set; }
+    public DbSet<Reference> MyReferences { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,6 +25,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(c => c.ParentCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
         builder.Entity<Reference>().HasKey(r => r.Id);
-        
     }
 }
