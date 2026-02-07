@@ -11,28 +11,26 @@
         <MudTh>Emne</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd >@context.URL</MudTd>
-        <MudTd >@context.Title</MudTd>
-        <MudTd >@context.Author</MudTd>
-        <MudTd >@context.Note</MudTd>
-        <MudTd >@context.Subject</MudTd>
-        @* <AuthorizeView Context=""> *@
-        @*     <MudTd > *@
-        @*         <MudButton OnClick="@DeleteReferenceAsync">Slet</MudButton> *@
-        @*     </MudTd> *@
-        @* </AuthorizeView> *@
+        <MudTd>@context.Title</MudTd>
+        <MudTd>
+            <MudLink Href="@context.URL">@context.URL</MudLink>
+        </MudTd>
+        <MudTd>@context.Author</MudTd>
+        <MudTd>@context.Note</MudTd>
+        <MudTd>@context.Subject</MudTd>
     </RowTemplate>
 </MudTable>
 
 <AuthorizeView>
     <MudExpansionPanel Text="Tilføj Reference">
         <MudForm @ref="form">
-            <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet" />
-            <MudTextField @bind-Value="newReference.Title" Label="Titel" />
-            <MudTextField @bind-Value="newReference.Author" Label="Forfatter" />
-            <MudTextField @bind-Value="newReference.Note" Label="Note" />
-            <MudTextField @bind-Value="newReference.Subject" Label="Emne" />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddReference" Class="mt-4">Tilføj</MudButton>
+            <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
+            <MudTextField @bind-Value="newReference.Title" Label="Titel"/>
+            <MudTextField @bind-Value="newReference.Author" Label="Forfatter"/>
+            <MudTextField @bind-Value="newReference.Note" Label="Note"/>
+            <MudTextField @bind-Value="newReference.Subject" Label="Emne"/>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddReference" Class="mt-4">Tilføj
+            </MudButton>
         </MudForm>
     </MudExpansionPanel>
 </AuthorizeView>
@@ -65,7 +63,7 @@
         {
             await ReferenceService.CreateReferenceAsync(newReference);
             references = await ReferenceService.GetAllReferencesAsync();
-            newReference = new();
+            newReference = new Reference();
             await form.ResetAsync();
             nav.Refresh(true);
         }
@@ -73,8 +71,7 @@
 
     private async Task DeleteReferenceAsync()
     {
-        
-            await ReferenceService.DeleteReferenceAsync(selectedReference);
-        
+        await ReferenceService.DeleteReferenceAsync(selectedReference);
     }
+
 }

@@ -30,6 +30,7 @@ builder.Services.AddScoped<IRepository<Reference>, ReferenceRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IReferenceService, ReferenceService>();
+builder.Services.AddScoped<IMarkdownFileService, MarkdownFileService>();
 
 
 // MudBlazor

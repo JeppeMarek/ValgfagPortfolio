@@ -14,7 +14,8 @@ public class ImageBlobStorageService : IBlobStorageService
     {
         "image/jpeg",
         "image/png",
-        "image/webp"
+        "image/webp",
+        "text/md"
     };
 
     private readonly BlobServiceClient _client;
