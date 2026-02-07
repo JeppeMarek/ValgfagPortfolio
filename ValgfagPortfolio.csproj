@@ -35,6 +35,7 @@
         <_ContentIncludedByDefault Remove="Components\Pages\Category\CategoryPage.razor" />
         <_ContentIncludedByDefault Remove="Components\Pages\Category\EditCategory.razor" />
         <_ContentIncludedByDefault Remove="Components\Pages\Category\NewCategory.razor" />
+        <_ContentIncludedByDefault Remove="wwwroot\Images\categories\18a35821-7a52-4d43-ac0f-81b067be4a3c.png" />
     </ItemGroup>
 
     <ItemGroup>
