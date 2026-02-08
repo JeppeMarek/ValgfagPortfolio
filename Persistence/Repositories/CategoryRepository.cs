@@ -38,7 +38,7 @@ public class CategoryRepository : IRepository<Category>
             .Include(c => c.ParentCategory)
             .Include(c => c.Children)
             .Include(c => c.Posts)
-            .FirstAsync(c => c.Id == id);
+            .FirstOrDefaultAsync(c => c.Id == id);
         return category;
     }
 

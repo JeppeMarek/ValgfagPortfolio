@@ -1,9 +1,14 @@
 @page "/goals/{subject}"
 @rendermode InteractiveServer
 @inject IMarkdownFileService MdService
+<AuthorizeView>
+    <MarkdownComponent @bind-MarkdownContent="@content"></MarkdownComponent>
+    <MudButton OnClick="@OnSaveClickAsync">Gem ændringer</MudButton>
+</AuthorizeView>
 
-<MarkdownComponent @bind-MarkdownContent="@content"></MarkdownComponent>
-<MudButton OnClick="@OnSaveClickAsync">Gem ændringer</MudButton>
+<MudPaper Class="border-secondary-subtle border-2 mt-3 mb-3">
+    <MudMarkdown Value="@content"></MudMarkdown>
+</MudPaper>
 
 @code {
     [Parameter] public string Subject { get; set; }

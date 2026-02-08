@@ -1,4 +1,5 @@
 @page "/category/{Id:int}"
+@using System.Text.RegularExpressions
 @attribute [StreamRendering]
 @inject ICategoryService categoryService
 @inject NavigationManager navigationManager
@@ -22,7 +23,8 @@
         <h2>@selectedCategory.Title</h2>
         <p>Opslag i kategori: @posts?.Count</p>
         <MudTable T="Post" Items="@posts" Breakpoint="Breakpoint.Sm"
-                   Hover="true" SortLabel="Sort By" OnRowClick="@((args) => navigationManager.NavigateTo($"/posts/{args.Item.Id}"))">
+                  Hover="true" SortLabel="Sort By"
+                  OnRowClick="@(args => navigationManager.NavigateTo($"/posts/{args.Item.Id}"))">
             <HeaderContent>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Post, object>(p => p.Title)">Titel</MudTableSortLabel>
@@ -39,10 +41,12 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Titel">@context.Title</MudTd>
-                <MudTd DataLabel="Sign">@context.Content</MudTd>
-                <MudTd DataLabel="Name">@context.DateCreated</MudTd>
-                <MudTd DataLabel="Position">@context.DateEdited</MudTd>
+                <MudTd Class="fw-bold" DataLabel="Titel">@context.Title</MudTd>
+                <MudTd DataLabel="Indhold">
+                    @StripMarkdown(context.Content, 100)
+                </MudTd>
+                <MudTd DataLabel="Oprettet">@context.DateCreated</MudTd>
+                <MudTd DataLabel="Redigeret">@context.DateEdited</MudTd>
                 <MudTd>
                     <MudButton Href=@($"/posts/{context.Id}")>Åbn</MudButton>
                 </MudTd>
@@ -68,12 +72,11 @@ else
     private List<Post>? posts = new();
     private List<BreadcrumbItem> breadcrumbItems = new();
     private readonly bool enabled = true;
-    
+
     protected override async Task OnParametersSetAsync()
     {
         try
         {
-            Console.WriteLine("Mojn");
             selectedCategory = await categoryService.GetCategoryByIdAsync(Id);
             breadcrumbItems = new List<BreadcrumbItem>
             {
@@ -82,13 +85,27 @@ else
             };
             CategoryTitle = selectedCategory.Title;
             posts = selectedCategory?.Posts ?? new List<Post>();
-            await InvokeAsync(StateHasChanged);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             posts = new List<Post>();
         }
+    }
+
+    private string StripMarkdown(string content, int maxLength)
+    {
+        if (string.IsNullOrEmpty(content))
+            return "";
+
+        // Remove markdown syntax
+        var stripped = Regex.Replace(content, @"^#+\s*", "", RegexOptions.Multiline); // Headers
+        stripped = Regex.Replace(stripped, @"\[([^\]]+)\]\([^\)]+\)", "$1"); // Links
+        stripped = Regex.Replace(stripped, @"[*_~`]", ""); // Bold, italic, strikethrough, code
+        stripped = Regex.Replace(stripped, @"\n+", " "); // Line breaks to spaces
+
+        // Trim to max length
+        return stripped.Length <= maxLength ? stripped : stripped.Substring(0, maxLength) + "...";
     }
 
 }

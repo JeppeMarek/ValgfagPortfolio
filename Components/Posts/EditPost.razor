@@ -5,7 +5,7 @@
 
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 <MudGrid>
-    <MudItem xs="12" sm="7">
+    <MudItem xs="12">
         <MudPaper class="pa-4">
             <MudForm @ref="form" Model="@selectedPost" @bind-IsValid="@isValid" @bind-Errors="@errors">
                 <MudTextField T="string" Label="Titel" @bind-Value="selectedPost.Title"
