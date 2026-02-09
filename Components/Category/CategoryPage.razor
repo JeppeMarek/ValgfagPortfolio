@@ -46,8 +46,8 @@
                 <MudTd DataLabel="Indhold">
                     @StripMarkdown(context.Content, 100)
                 </MudTd>
-                <MudTd DataLabel="Oprettet">@context.DateCreated</MudTd>
-                <MudTd DataLabel="Redigeret">@context.DateEdited</MudTd>
+                <MudTd DataLabel="Oprettet">@context.DateCreated.ToString("dd/MM HH:mm")</MudTd>
+                <MudTd DataLabel="Redigeret">@context.DateEdited.ToString("dd/MM HH:mm")</MudTd>
                 <MudTd>
                     <MudButton Href=@($"/posts/{context.Id}")>Åbn</MudButton>
                 </MudTd>
