@@ -3,15 +3,23 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-trigger:
-- master
+   trigger:
+     branches:
+       include:
+       - main
+       - develop
 
-pool:
-  vmImage: ubuntu-latest
+   pool:
+     vmImage: 'ubuntu-latest'
 
-variables:
-  buildConfiguration: 'Release'
+   steps:
+   - checkout: self
+     fetchDepth: 0
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+   - script: |
+       git remote add azure https://$(AZURE_PAT)@dev.azure.com/$(AZURE_ORG)/$(AZURE_PROJECT)/_git/$(AZURE_REPO).git
+       git push azure --all
+       git push azure --tags
+     displayName: 'Push to Azure Repos'
+     env:
+       AZURE_PAT: $(AZURE_PAT)
