@@ -22,7 +22,7 @@
 </MudTable>
 
 <AuthorizeView>
-    <MudExpansionPanel Text="Tilføj Reference">
+    <MudExpansionPanel Text="Tilføj Reference" Class="navbar-expand mt-3 rounded-3">
         <MudForm @ref="form">
             <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
             <MudTextField @bind-Value="newReference.Title" Label="Titel"/>

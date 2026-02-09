@@ -6,17 +6,17 @@
 
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 
-<MudPaper Elevation="3" Class="bg-body-secondary mt-5">
+<MudPaper Elevation="3" Class="rounded-3">
     <MudCard>
         <MudCardContent>
-            <MudGrid Spacing="1" Justify="Justify.SpaceEvenly">
+            <MudGrid Spacing="1" Justify="Justify.SpaceBetween" Class="align-items-center">
                 <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
-                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1">Opslag oprettet:
+                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1"><b >Oprettet:</b>
                     @createdDate</MudText>
-                <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1">Opslag sidst redigeret:
+                <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1"><b>Redigeret:</b>
                     @lastEditedDate</MudText>
             </MudGrid>
-            <MudPaper Class="border-secondary-subtle border-4 mt-5">
+            <MudPaper Class="border-secondary-subtle border-1 border-opacity-50 mt-5">
                 <MudMarkdown Value="@selectedPost.Content"></MudMarkdown>
             </MudPaper>
         </MudCardContent>
@@ -56,8 +56,8 @@
                 new("Kategori", $"category/{categoryId}"),
                 new($"{selectedPost.Title}", null, true)
             };
-            createdDate = selectedPost.DateCreated.ToString("dd/MM | HH:mm");
-            lastEditedDate = selectedPost.DateEdited.ToString("dd/MM | HH:mm");
+            createdDate = selectedPost.DateCreated.ToString("dd/MM");
+            lastEditedDate = selectedPost.DateEdited.ToString("dd/MM HH:mm");
         }
         catch (Exception e)
         {

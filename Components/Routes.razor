@@ -1,4 +1,5 @@
 ﻿@using ValgfagPortfolio.Components.Account.Shared
+@rendermode InteractiveServer
 <Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(NotFound)">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
