@@ -2,30 +2,97 @@
 @rendermode InteractiveServer
 <h3>AllCategories</h3>
 
-<MudGrid Spacing="2">
-    @if (allCategories.Count > 0)
+@if (allCategories.Count > 0)
+{
+    @if (logCategories.Count > 0)
     {
-        foreach (var category in allCategories)
-        {
-            <MudItem Class="align-items-lg-start">
-                <CategoryComponent SelectedCategory="category"/>
-            </MudItem>
-        }
-    }
-    else
-    {
-        <MudText>Ingen kategorier</MudText>
+        <MudText Typo="Typo.h5" Class="mt-6 mb-4">Log Kategorier</MudText>
+        <MudGrid Spacing="2">
+            @foreach (var category in logCategories)
+            {
+                <MudItem xs="12" sm="6" lg="4" Class="align-items-lg-start">
+                    <CategoryComponent SelectedCategory="category"/>
+                </MudItem>
+            }
+        </MudGrid>
     }
 
-</MudGrid>
+    @if (projectCategories.Count > 0)
+    {
+        <MudText Typo="Typo.h5" Class="mt-6 mb-4">Projekt Kategorier</MudText>
+        <MudGrid Spacing="2">
+            @foreach (var category in projectCategories)
+            {
+                <MudItem xs="12" sm="6" lg="4" Class="align-items-lg-start">
+                    <CategoryComponent SelectedCategory="category"/>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+    @if (diverseCategories.Count > 0)
+    {
+        <MudText Typo="Typo.h5" Class="mt-6 mb-4">Diverse Kategorier</MudText>
+        <MudGrid Spacing="2">
+            @foreach (var category in diverseCategories)
+            {
+                <MudItem xs="12" sm="6" lg="4" Class="align-items-lg-start">
+                    <CategoryComponent SelectedCategory="category"/>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+    @if (defaultCategories.Count > 0)
+    {
+        <MudText Typo="Typo.h5" Class="mt-6 mb-4">Øvrige Kategorier</MudText>
+        <MudGrid Spacing="2">
+            @foreach (var category in defaultCategories)
+            {
+                <MudItem xs="12" sm="6" lg="4" Class="align-items-lg-start">
+                    <CategoryComponent SelectedCategory="category"/>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+}
+else
+{
+    <MudText>Ingen kategorier</MudText>
+}
 
 @code {
     [Inject] public ICategoryService CategoryService { get; set; }
     private List<Category> allCategories = new();
+    private List<Category> logCategories = new();
+    private List<Category> projectCategories = new();
+    private List<Category> diverseCategories = new();
+    private List<Category> defaultCategories = new();
 
     protected override async Task OnInitializedAsync()
     {
         allCategories = await CategoryService.GetAllCategoriesAsync();
+        SortCategoriesByType();
+    }
+
+    private void SortCategoriesByType()
+    {
+        logCategories = allCategories
+            .Where(c => Path.GetFileName(c.LogoImgPath ?? string.Empty) == "log.png")
+            .ToList();
+
+        projectCategories = allCategories
+            .Where(c => Path.GetFileName(c.LogoImgPath ?? string.Empty) == "project.png")
+            .ToList();
+
+        diverseCategories = allCategories
+            .Where(c => Path.GetFileName(c.LogoImgPath ?? string.Empty) == "diverse.png")
+            .ToList();
+
+        defaultCategories = allCategories
+            .Where(c => !new[] { "log.png", "project.png", "diverse.png" }
+                .Contains(Path.GetFileName(c.LogoImgPath ?? string.Empty)))
+            .ToList();
     }
 
 }
