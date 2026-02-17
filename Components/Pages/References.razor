@@ -10,14 +10,21 @@
         <MudTh>Note</MudTh>
         <MudTh>Emne</MudTh>
     </HeaderContent>
-    <RowTemplate>
-        <MudTd>@context.Title</MudTd>
+    <RowTemplate Context="reference">
+        <MudTd>@reference.Title</MudTd>
         <MudTd>
-            <MudLink Href="@context.URL">@context.URL</MudLink>
+            <MudLink Href="@reference.URL">@reference.URL</MudLink>
         </MudTd>
-        <MudTd>@context.Author</MudTd>
-        <MudTd>@context.Note</MudTd>
-        <MudTd>@context.Subject</MudTd>
+        <MudTd>@reference.Author</MudTd>
+        <MudTd>@reference.Note</MudTd>
+        <MudTd>@reference.Subject</MudTd>
+        <AuthorizeView>
+            <MudTd>
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => DeleteReferenceAsync(reference)" Size="Size.Small">
+                    Slet
+                </MudButton>
+            </MudTd>
+        </AuthorizeView>
     </RowTemplate>
 </MudTable>
 
@@ -27,7 +34,7 @@
             <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
             <MudTextField @bind-Value="newReference.Title" Label="Titel"/>
             <MudTextField @bind-Value="newReference.Author" Label="Forfatter"/>
-            <MudTextField @bind-Value="newReference.Note" Label="Note"/>
+            <MudTextField @bind-Value="newReference.Note" Label="Note/vurdering"/>
             <MudTextField @bind-Value="newReference.Subject" Label="Emne"/>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddReference" Class="mt-4">Tilføj
             </MudButton>
@@ -69,9 +76,11 @@
         }
     }
 
-    private async Task DeleteReferenceAsync()
+    private async Task DeleteReferenceAsync(Reference reference)
     {
-        await ReferenceService.DeleteReferenceAsync(selectedReference);
+        await ReferenceService.DeleteReferenceAsync(reference);
+        references = await ReferenceService.GetAllReferencesAsync();
+        nav.Refresh(true);
     }
 
 }

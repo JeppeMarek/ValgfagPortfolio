@@ -44,7 +44,7 @@
     private readonly bool allowHTML = true;
     private List<BreadcrumbItem> breadcrumbItems = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         try
         {
