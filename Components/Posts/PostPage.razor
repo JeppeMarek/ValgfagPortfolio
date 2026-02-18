@@ -11,12 +11,12 @@
         <MudCardContent>
             <MudGrid Spacing="1" Justify="Justify.SpaceBetween" Class="align-items-center">
                 <MudText Color="Color.Primary" Typo="Typo.h4" Class="text-capitalize">@selectedPost.Title</MudText>
-                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1"><b >Oprettet:</b>
+                <MudText Class="mt-3" Style="color: seagreen;" Typo="Typo.subtitle1"><b>Oprettet:</b>
                     @createdDate</MudText>
                 <MudText Class="mt-3" Style="color: seagreen" Typo="Typo.subtitle1"><b>Redigeret:</b>
                     @lastEditedDate</MudText>
             </MudGrid>
-            <MudPaper Class="border-secondary-subtle border-1 border-opacity-50 mt-5">
+            <MudPaper Class="border-secondary-subtle border-1 border-opacity-50 mt-5 px-4">
                 <MudMarkdown Value="@selectedPost.Content"></MudMarkdown>
             </MudPaper>
         </MudCardContent>

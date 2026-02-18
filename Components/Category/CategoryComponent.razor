@@ -3,9 +3,10 @@
 @inject ICategoryService CategoryService
 @inject IBlobStorageService BlobService
 @inject NavigationManager Nav
-<MudCard Elevation="3" Class="rounded-4 card">
-    <MudImage Src="@SelectedCategory.CoverImgPath" ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
-    <MudCardContent>
+<MudCard Elevation="3" Class="rounded-4 card" Style="height: 100%; display: flex; flex-direction: column;">
+    <MudImage Src="@SelectedCategory.CoverImgPath" Class="pt-4" ObjectPosition="ObjectPosition.Center"
+              ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
+    <MudCardContent Style="flex: 1; overflow-y: auto;">
         <MudText Style="@HeaderStyle" Typo="Typo.h5" Class="category-card__title">
             @SelectedCategory.Title
             <MudImage Src="@SelectedCategory.LogoImgPath" Height="18" Width="18"></MudImage>
@@ -34,7 +35,7 @@
             <MudText Typo="Typo.body2">Ingen kategorier fundet denne gang</MudText>
         }
     </MudCardContent>
-    <MudCardActions>
+    <MudCardActions Style="margin-top: auto;">
         <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
                    StartIcon="@Icons.Material.Filled.FileOpen">
             <a href="@(SelectedCategory.ParentCategoryId > 0

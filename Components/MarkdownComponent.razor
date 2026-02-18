@@ -1,25 +1,44 @@
 @rendermode InteractiveAuto
-<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
-    <MudTextField T="string"
-                  Class="overflow-scroll"
-                  Typo="Typo.body2"
-                  Value="@MarkdownContent"
-                  ValueChanged="OnValueChanged"
-                  Placeholder="Begynd at skriv opslagets indhold her... Teksten understøtter Markdown"
-                  HelperText="Opslagets indhold"
-                  Lines="15"/>
-
-    <div Size="12" SizeMD="6" Style="min-width: 0;">
-        <MudButton EndIcon="@Icons.Material.Filled.Update" Color="Color.Tertiary" Ripple="true"
-                   OnClick="@UpdatePreview">Opdater
-        </MudButton>
-        <MudMarkdown @rendermode="InteractiveServer" HasTableOfContents="true" Value="@MarkdownContent"/>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="d-flex flex-column vh-100" Style="gap: 8px;">
+    <MudButton OnClick="OnExpandPreviewClick"
+               Class="mb-2">@(isPreviewExpanded ? "Fold sammen" : "Vis markdown")</MudButton>
+    <div Class="@(isPreviewExpanded ? "d-flex" : "")"
+         Style="@(isPreviewExpanded ? "flex: 1; gap: 16px; min-height: 0;" : "")">
+        <div
+            Style="@(isPreviewExpanded ? "flex: 1; min-width: 0; display: flex; flex-direction: column;" : "flex: 1;")">
+            <MudTextField T="string"
+                          Class="@(isPreviewExpanded ? "overflow-auto" : "overflow-scroll")"
+                          Style="@(isPreviewExpanded ? "flex: 1;" : "")"
+                          Typo="Typo.body2"
+                          Value="@MarkdownContent"
+                          ValueChanged="OnValueChanged"
+                          Placeholder="Begynd at skriv opslagets indhold her... Teksten understøtter Markdown"
+                          HelperText="Opslagets indhold"
+                          Lines="50"/>
+        </div>
+        <!--Preview text as markdown-->
+        <MudCollapse Expanded="isPreviewExpanded"
+                     Style="@(isPreviewExpanded ? "flex: 1; min-width: 0; overflow: auto;" : "")">
+            <div Style="min-width: 0;">
+                <MudMarkdown @rendermode="InteractiveServer" HasTableOfContents="true" Value="@MarkdownContent"/>
+            </div>
+        </MudCollapse>
     </div>
 </MudContainer>
 
 
 @code {
     private string previewText = "";
+    private bool isPreviewExpanded;
+
+    private async Task OnExpandPreviewClick()
+    {
+        isPreviewExpanded = !isPreviewExpanded;
+        if (isPreviewExpanded)
+        {
+            await UpdatePreview();
+        }
+    }
 
     private async Task OnValueChanged(string? value)
     {
