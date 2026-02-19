@@ -8,7 +8,7 @@
     <MudGrid Spacing="2">
         @foreach (var category in topCategories)
         {
-            <MudItem Class="align-items-lg-start">
+            <MudItem xs="12" sm="6" lg="4">
                 <CategoryComponent SelectedCategory="@category"></CategoryComponent>
             </MudItem>
         }
