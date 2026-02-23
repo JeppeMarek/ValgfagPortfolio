@@ -19,7 +19,7 @@
 #git remote add azure https://$(AZURE_PAT)@dev.azure.com/$(AZURE_ORG)/$(AZURE_PROJECT)/_git/$(AZURE_REPO)
    - script:
        git remote add "azure" https://dev.azure.com/JeppeMarek/_git/Valgfagsportfolio
-       git push azure
+       git push -u azure master
      displayName: 'Push to Azure Repos'
      env:
        AZURE_PAT: $(AZURE_PAT)
