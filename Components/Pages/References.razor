@@ -2,7 +2,10 @@
 @rendermode InteractiveServer
 @inject NavigationManager nav
 <h3>Kilder</h3>
-<MudTable bind-SelectedItem="@selectedReference" T="Reference" Items="references" Breakpoint="Breakpoint.Sm">
+<MudTable bind-SelectedItem="@selectedReference"
+          T="Reference"
+          Items="references"
+          Breakpoint="Breakpoint.Sm">
     <HeaderContent>
         <MudTh>URL</MudTh>
         <MudTh>Titel</MudTh>
@@ -20,7 +23,8 @@
         <MudTd>@reference.Subject</MudTd>
         <AuthorizeView>
             <MudTd>
-                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => DeleteReferenceAsync(reference)" Size="Size.Small">
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => DeleteReferenceAsync(reference)"
+                           Size="Size.Small">
                     Slet
                 </MudButton>
             </MudTd>
@@ -30,7 +34,7 @@
 
 <AuthorizeView>
     <MudExpansionPanel Text="Tilføj Reference" Class="navbar-expand mt-3 rounded-3">
-        <MudForm @ref="form">
+        <MudForm @ref="form" @bind-Errors="@errors">
             <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
             <MudTextField @bind-Value="newReference.Title" Label="Titel"/>
             <MudTextField @bind-Value="newReference.Author" Label="Forfatter"/>
@@ -50,12 +54,15 @@
     private MudForm form;
     private int selectedId;
     private Reference selectedReference;
+    private string[] errors = { };
+    private bool isValid;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             references = await ReferenceService.GetAllReferencesAsync();
+            references = references.OrderBy(r => r.Subject).ToList();
         }
         catch (NullReferenceException e)
         {
@@ -65,14 +72,24 @@
 
     private async Task AddReference()
     {
-        await form.Validate();
-        if (form.IsValid)
+        try
         {
-            await ReferenceService.CreateReferenceAsync(newReference);
-            references = await ReferenceService.GetAllReferencesAsync();
-            newReference = new Reference();
-            await form.ResetAsync();
-            nav.Refresh(true);
+            await form.Validate();
+            if (form.IsValid)
+            {
+                isValid = await ReferenceService.CreateReferenceAsync(newReference);
+                if (isValid)
+                {
+                    references = await ReferenceService.GetAllReferencesAsync();
+                    newReference = new Reference();
+                    await form.ResetAsync();
+                    nav.Refresh(true);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            errors = [e.Message];
         }
     }
 

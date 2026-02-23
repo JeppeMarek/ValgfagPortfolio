@@ -10,7 +10,7 @@ public class Reference
     [StringLength(50)]
     public string Title { get; set; }
     public string Author { get; set; }
-    [StringLength(200)]
+    [StringLength(500)]
     public string Note { get; set; }
     public string Subject { get; set; }
 }

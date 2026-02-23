@@ -18,9 +18,24 @@ public partial class TopCategory : ComponentBase
         Category = await CategoryService.GetCategoryByIdAsync(Id);
 
         SubCategories = await CategoryService.GetSubCategoriesAsync(Id);
+        await GetRecentPostsAsync();
+    }
 
-        RecentPosts = await PostService.GetAllPostsAsync();
-        RecentPosts = RecentPosts.OrderBy(post => post.DateEdited).ToList();
+    protected override async Task OnParametersSetAsync()
+    {
+        SubCategories = await CategoryService.GetSubCategoriesAsync(Id);
+        await GetRecentPostsAsync();
+    }
+
+    private async Task GetRecentPostsAsync()
+    {
+        RecentPosts.Clear();
+        foreach (var subCategory in SubCategories)
+        {
+            foreach (var subCategoryPost in subCategory.Posts)
+                RecentPosts.Add(subCategoryPost);
+        }
+        RecentPosts = RecentPosts.OrderByDescending(post => post.DateEdited).ToList();
     }
 
     private void OnExpandCollapseClick()
