@@ -8,6 +8,7 @@
        include:
        - main
        - develop
+       - Pipeline-Testing
 
    pool:
      vmImage: 'ubuntu-latest'
