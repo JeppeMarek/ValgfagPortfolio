@@ -1,8 +1,11 @@
 @page "/posts/{Id:int}"
 @using Microsoft.Build.Framework
+@using ValgfagPortfolio.Components.Dialogs
 @rendermode InteractiveServer
+
 @inject IPostService Service
 @inject NavigationManager nav
+@inject IDialogService DialogService
 
 <BreadCrumbComponent Items="breadcrumbItems"></BreadCrumbComponent>
 
@@ -36,6 +39,7 @@
 @code {
     [Parameter] public int Id { get; set; }
     [Required] public Post selectedPost { get; set; } = new();
+    
 
     private int categoryId { get; set; }
     private string? createdDate;
@@ -78,7 +82,19 @@
 
     private async Task OnDeleteClick()
     {
-        await DeletePostAsync();
+        var parameters = new DialogParameters<ConfirmDialog>
+        {
+            { x => x.Title, "Slet opslag" },
+            { x => x.Message, "Er du sikker på, at du vil slette dette opslag? Denne handling kan ikke fortrydes." }
+        };
+        
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Bekræft sletning", parameters);
+        var result = await dialog.Result;
+        
+        if (!result.Canceled)
+        {
+            await DeletePostAsync();
+        }
     }
 
 }
