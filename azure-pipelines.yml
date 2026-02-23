@@ -18,7 +18,7 @@
      fetchDepth: 0
 
    - script: |
-       git remote add azure https://dev.azure.com/JeppeMarek/_git/Valgfagsportfolio
+       git remote add azure https://PAT:$(AZURE_PAT)@dev.azure.com/JeppeMarek/_git/Valgfagsportfolio
        git push azure --all
        git push azure --tags
      displayName: 'Push to Azure Repos'
