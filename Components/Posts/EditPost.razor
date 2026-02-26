@@ -19,9 +19,6 @@
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
                            OnClick="@ValidateAndSaveAsync">Gem
                 </MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false"
-                           OnClick="@ResetFormAndValidationAsync" Class="mx-2">Reset
-                </MudButton>
             </MudPaper>
         </MudPaper>
     </MudItem>
@@ -45,12 +42,6 @@
             new(selectedPost.Title, $"posts/{selectedPost.Id}/"),
             new(selectedPost.Title, null, true)
         };
-    }
-
-    private async Task ResetFormAndValidationAsync()
-    {
-        await form.ResetAsync();
-        form.ResetValidation();
     }
 
     private void UpdateDate()

@@ -3,7 +3,9 @@
 @inject ICategoryService CategoryService
 @inject IBlobStorageService BlobService
 @inject NavigationManager Nav
-<MudCard Elevation="3" Class="rounded-4 card" Style="height: 100%; display: flex; flex-direction: column;">
+<MudCard Elevation="3" Class="rounded-4 card"
+         Style="height: 100%; display: flex; flex-direction: column; cursor: pointer"
+         @onclick="OnCardClick">
     <MudImage Src="@SelectedCategory.CoverImgPath" Class="pt-4" ObjectPosition="ObjectPosition.Center"
               ObjectFit="ObjectFit.ScaleDown" Height="240"></MudImage>
     <MudCardContent Style="flex: 1; overflow-y: auto;">
@@ -107,5 +109,13 @@
     private void OnExpandCollapseClick()
     {
         isExpanded = !isExpanded;
+    }
+
+    private void OnCardClick()
+    {
+        var url = SelectedCategory.ParentCategoryId > 0
+            ? $"/category/{SelectedCategory.Id}"
+            : $"/topcategory/{SelectedCategory.Id}";
+        Nav.NavigateTo(url);
     }
 }

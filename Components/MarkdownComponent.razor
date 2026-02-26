@@ -1,4 +1,6 @@
 @using Markdig
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 @rendermode InteractiveAuto
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="d-flex flex-column vh-100" Style="gap: 8px;">
     <MudButton OnClick="OnExpandPreviewClick"
@@ -7,15 +9,12 @@
          Style="@(isPreviewExpanded ? "flex: 1; gap: 16px; min-height: 0;" : "")">
         <div
             Style="@(isPreviewExpanded ? "flex: 1; min-width: 0; display: flex; flex-direction: column;" : "flex: 1;")">
-            <MudTextField T="string"
-                          Class="@(isPreviewExpanded ? "overflow-auto" : "overflow-scroll")"
-                          Style="@(isPreviewExpanded ? "flex: 1;" : "")"
-                          Typo="Typo.body2"
-                          Value="@MarkdownContent"
-                          ValueChanged="OnValueChanged"
-                          Placeholder="Begynd at skriv opslagets indhold her... Teksten understøtter Markdown"
-                          HelperText="Opslagets indhold"
-                          Lines="50"/>
+            <textarea @ref="textareaRef"
+                      class="@(isPreviewExpanded ? "overflow-auto" : "overflow-scroll")"
+                      style="@(isPreviewExpanded ? "flex: 1;" : "") resize: none; padding: 12px; font-family: monospace; border: 1px solid #ccc; border-radius: 4px;"
+                      placeholder="Begynd at skriv opslagets indhold her... Teksten understøtter Markdown"
+                      rows="50"
+                      @onchange="OnValueChanged">@MarkdownContent</textarea>
         </div>
         <!--Preview text as markdown-->
         <MudCollapse Expanded="isPreviewExpanded"
@@ -31,6 +30,17 @@
 @code {
     private string previewText = "";
     private bool isPreviewExpanded;
+    private ElementReference textareaRef;
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/MarkdownComponent.razor.js");
+            await module.InvokeVoidAsync("enableTabIndent", textareaRef);
+        }
+    }
 
     private async Task OnExpandPreviewClick()
     {
@@ -41,24 +51,35 @@
         }
     }
 
-    private async Task OnValueChanged(string? value)
+    private async Task OnValueChanged(ChangeEventArgs e)
     {
-        MarkdownContent = value;
-        await MarkdownContentChanged.InvokeAsync(value);
+        MarkdownContent = e.Value?.ToString();
+        await MarkdownContentChanged.InvokeAsync(MarkdownContent);
     }
 
     private async Task UpdatePreview()
     {
         previewText = MarkdownContent ?? "";
     }
-    
+
     private static readonly MarkdownPipeline MarkdownPipeline =
         new MarkdownPipelineBuilder()
             .UseDiagrams()
             .UseEmojiAndSmiley()
+            .UseCitations()
+            .UseAutoLinks()
             .Build();
 
     [Parameter] public string? MarkdownContent { get; set; }
 
     [Parameter] public EventCallback<string?> MarkdownContentChanged { get; set; }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+
 }
