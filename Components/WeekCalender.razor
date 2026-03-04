@@ -1,4 +1,6 @@
-<MudTable Class="mb-2 mt-2 rounded-4 col-sm-2" Elevation="2" Items="@rows" Hover="true" Striped="true" Bordered="true">
+<MudTable Class="mb-2 mt-2 rounded-4 d-flex" Elevation="4" Items="@rows"
+          Hover="true" Striped="true" Bordered="true"
+          Breakpoint="Breakpoint.SmAndDown">
     <ColGroup>
         <col style="width: 12.5%;"/>
         <col style="width: 12.5%;"/>
@@ -9,6 +11,16 @@
         <col style="width: 12.5%;"/>
         <col style="width: 12.5%;"/>
     </ColGroup>
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh>Mandag</MudTh>
+        <MudTh>Tirsdag</MudTh>
+        <MudTh>Onsdag</MudTh>
+        <MudTh>Torsdag</MudTh>
+        <MudTh>Fredag</MudTh>
+        <MudTh>Lørdag</MudTh>
+        <MudTh>Søndag</MudTh>
+    </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="">@context.Col1</MudTd>
         <MudTd DataLabel="">
@@ -102,7 +114,6 @@
 
     private readonly List<TableRow> rows = new()
     {
-        new TableRow { Col1 = "Dag", Col2 = "Mandag", Col3 = "Tirsdag", Col4 = "Onsdag", Col5 = "Torsdag", Col6 = "Fredag", Col7 = "Lørdag", Col8 = "Søndag" },
         new TableRow { Col1 = "Fag", Col2 = "DevOps", Col3 = "DevOps", Col4 = "React Native", Col5 = "React Native", Col6 = "Flex", Col7 = "Flex", Col8 = "Flex" },
         new TableRow { Col1 = "Tid", Col2 = "08.00 - 14.00", Col3 = "08.00 - 14.00", Col4 = "08.00 - 14.00", Col5 = "08.00 - 14.00", Col6 = "08.00 - 14.00", Col7 = "12.00 - 15.00", Col8 = "12.00 - 15.00" }
     };
