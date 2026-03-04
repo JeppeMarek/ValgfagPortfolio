@@ -1,19 +1,52 @@
-﻿<MudAppBar Elevation="1" Color="Color.Tertiary" Dense="true" Fixed="false">
-    <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/" Class="navbar-brand fw-bold">Portfolio</MudButton>
-    <MudButtonGroup>
-        <MudButton Class="navbar-brand" href="/alltopcategories">Overkategorier</MudButton>
-        <MudButton Class="navbar-brand" href="/allcategories">Kategorier</MudButton>
-        <MudButton  Class="navbar-brand" href="/posts/24">DevOps Læringsmål</MudButton>
-        <MudButton Class="navbar-brand" href="/posts/25">React Native Læringsmål</MudButton>
-        <MudButton Class="navbar-brand" href="/references">Kilder</MudButton>
-    </MudButtonGroup>
-    <MudSpacer/>
+﻿<MudLayout>
+    <MudAppBar Elevation="1" Color="Color.Tertiary" Dense="true" Fixed="false">
+        @* Hamburger menu - vises kun på mobil (Xs og Sm) *@
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Default"
+                           OnClick="@(e => DrawerToggle())"/>
+        </MudHidden>
 
+        <MudButton StartIcon="@Icons.Material.Filled.Home" Href="/" Class="navbar-brand fw-bold"></MudButton>
 
-    <MudButtonGroup>
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
-                       Href="https://github.com/JeppeMarek"></MudIconButton>
-        <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
-                       Href="https://linkedin.com/in/jeppe-marek-b775b6328"></MudIconButton>
-    </MudButtonGroup>
-</MudAppBar>
+        @* Desktop menu - skjules på mobil *@
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudButtonGroup>
+                <MudButton Class="navbar-brand" href="/alltopcategories">Overkategorier</MudButton>
+                <MudButton Class="navbar-brand" href="/allcategories">Kategorier</MudButton>
+                <MudButton Class="navbar-brand" href="/posts/24">DevOps Læringsmål</MudButton>
+                <MudButton Class="navbar-brand" href="/posts/25">React Native Læringsmål</MudButton>
+                <MudButton Class="navbar-brand" href="/references">Kilder</MudButton>
+            </MudButtonGroup>
+        </MudHidden>
+
+        <MudSpacer/>
+
+        <MudButtonGroup>
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/JeppeMarek" Target="_blank"/>
+            <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Href="https://linkedin.com/in/jeppe-marek-b775b6328"
+                           Target="_blank"/>
+        </MudButtonGroup>
+    </MudAppBar>
+
+    @* Sidemenuen til mobil *@
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Anchor="Anchor.Left" Variant="@DrawerVariant.Responsive">
+        <MudNavMenu>
+            <MudText Typo="Typo.h6" Class="px-4 py-3">Menu</MudText>
+            <MudNavLink href="/alltopcategories" Icon="@Icons.Material.Filled.Category">Overkategorier</MudNavLink>
+            <MudNavLink href="/allcategories" Icon="@Icons.Material.Filled.List">Kategorier</MudNavLink>
+            <MudNavLink href="/posts/24" Icon="@Icons.Material.Filled.Terminal">DevOps</MudNavLink>
+            <MudNavLink href="/posts/25" Icon="@Icons.Material.Filled.MobileFriendly">React Native</MudNavLink>
+            <MudNavLink href="/references" Icon="@Icons.Material.Filled.MenuBook">Kilder</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+</MudLayout>
+
+@code {
+    bool _drawerOpen;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+}

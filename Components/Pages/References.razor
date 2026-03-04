@@ -5,10 +5,10 @@
 <MudTable bind-SelectedItem="@selectedReference"
           T="Reference"
           Items="references"
-          Breakpoint="Breakpoint.Sm">
+          Breakpoint="Breakpoint.SmAndDown">
     <HeaderContent>
-        <MudTh>URL</MudTh>
         <MudTh>Titel</MudTh>
+        <MudTh>URL</MudTh>
         <MudTh>Forfatter</MudTh>
         <MudTh>Note</MudTh>
         <MudTh>Emne</MudTh>
@@ -35,8 +35,8 @@
 <AuthorizeView>
     <MudExpansionPanel Text="Tilføj Reference" Class="navbar-expand mt-3 rounded-3">
         <MudForm @ref="form" @bind-Errors="@errors">
-            <MudTextField @bind-Value="newReference.URL" Label="Titel" Required="true" RequiredError="URL er påkrævet"/>
-            <MudTextField @bind-Value="newReference.Title" Label="URL"/>
+            <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
+            <MudTextField @bind-Value="newReference.Title" Label="Titel"/>
             <MudTextField @bind-Value="newReference.Author" Label="Forfatter"/>
             <MudTextField @bind-Value="newReference.Note" Label="Note/vurdering"/>
             <MudTextField @bind-Value="newReference.Subject" Label="Emne"/>
