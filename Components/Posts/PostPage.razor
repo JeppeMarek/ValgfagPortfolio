@@ -1,4 +1,5 @@
 @page "/posts/{Id:int}"
+@using Markdig
 @using Microsoft.Build.Framework
 @rendermode InteractiveServer
 @inject IPostService Service
@@ -17,7 +18,7 @@
                     @lastEditedDate</MudText>
             </MudGrid>
             <MudPaper Class="border-secondary-subtle border-1 border-opacity-50 mt-5 px-4">
-                <MudMarkdown Value="@selectedPost.Content"></MudMarkdown>
+                <MudMarkdown Value="@selectedPost.Content" MarkdownPipeline="MarkdownPipeline" Styling="Styling"></MudMarkdown>
             </MudPaper>
         </MudCardContent>
         <MudCardActions>
@@ -64,6 +65,23 @@
             Console.WriteLine(e);
         }
     }
+    
+    private static readonly MarkdownPipeline MarkdownPipeline =
+        new MarkdownPipelineBuilder()
+            .UseDiagrams()
+            .UseEmojiAndSmiley()
+            .UseCitations()
+            .UseAutoLinks()
+            .UseAdvancedExtensions()
+            .UseSoftlineBreakAsHardlineBreak()
+            .Build();
+    private static readonly MudMarkdownStyling Styling = new()
+    {
+        Link =
+        {
+            Underline = Underline.Always
+        }
+    };
 
     private async Task DeletePostAsync()
     {

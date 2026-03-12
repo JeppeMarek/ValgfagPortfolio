@@ -8,15 +8,17 @@
           Breakpoint="Breakpoint.SmAndDown">
     <HeaderContent>
         <MudTh>Titel</MudTh>
-        <MudTh>URL</MudTh>
+        <MudTh Style="max-width: 150px;">URL</MudTh>
         <MudTh>Forfatter</MudTh>
-        <MudTh>Note</MudTh>
+        <MudTh Style="min-width: 300px;">Note</MudTh>
         <MudTh>Emne</MudTh>
     </HeaderContent>
     <RowTemplate Context="reference">
         <MudTd>@reference.Title</MudTd>
         <MudTd>
-            <MudLink Href="@reference.URL">@reference.URL</MudLink>
+            <MudTooltip Text="@reference.URL">
+                <MudLink Target="blank" Href="@reference.URL">@TruncateUrl(reference.URL, 30)</MudLink>
+            </MudTooltip>
         </MudTd>
         <MudTd>@reference.Author</MudTd>
         <MudTd>@reference.Note</MudTd>
@@ -38,7 +40,7 @@
             <MudTextField @bind-Value="newReference.URL" Label="URL" Required="true" RequiredError="URL er påkrævet"/>
             <MudTextField @bind-Value="newReference.Title" Label="Titel"/>
             <MudTextField @bind-Value="newReference.Author" Label="Forfatter"/>
-            <MudTextField @bind-Value="newReference.Note" Label="Note/vurdering"/>
+            <MudTextField @bind-Value="newReference.Note" Label="Note/vurdering" Lines="4"/>
             <MudTextField @bind-Value="newReference.Subject" Label="Emne"/>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddReference" Class="mt-4">Tilføj
             </MudButton>
@@ -98,6 +100,14 @@
         await ReferenceService.DeleteReferenceAsync(reference);
         references = await ReferenceService.GetAllReferencesAsync();
         nav.Refresh(true);
+    }
+
+    private string TruncateUrl(string url, int maxLength)
+    {
+        if (string.IsNullOrEmpty(url))
+            return url;
+        
+        return url.Length > maxLength ? url.Substring(0, maxLength) + "..." : url;
     }
 
 }

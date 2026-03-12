@@ -20,7 +20,8 @@
         <MudCollapse Expanded="isPreviewExpanded"
                      Style="@(isPreviewExpanded ? "flex: 1; min-width: 0; overflow: auto;" : "")">
             <div Style="min-width: 0;">
-                <MudMarkdown MarkdownPipeline="MarkdownPipeline" HasTableOfContents="true" Value="@MarkdownContent"/>
+                <MudMarkdown MarkdownPipeline="MarkdownPipeline" HasTableOfContents="true"  TableOfContentsHeader="Oversigt"
+                             Value="@MarkdownContent" Styling="Styling"/>
             </div>
         </MudCollapse>
     </div>
@@ -68,7 +69,16 @@
             .UseEmojiAndSmiley()
             .UseCitations()
             .UseAutoLinks()
+            .UseAdvancedExtensions()
+            .UseSoftlineBreakAsHardlineBreak()
             .Build();
+    private static readonly MudMarkdownStyling Styling = new()
+    {
+        Link =
+        {
+            Underline = Underline.Always
+        }
+    };
 
     [Parameter] public string? MarkdownContent { get; set; }
 
